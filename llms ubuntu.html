@@ -1,0 +1,2325 @@
+html
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ubuntu Academy — African Learning Management System">
+<meta name="theme-color" content="#0F2419">
+<title>Ubuntu Academy — African Learning Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+/* ============================================================
+   DESIGN TOKENS — single source of truth
+   ============================================================ */
+:root {
+  --primary:#1A3C2F; --primary-light:#2D6A4F; --primary-pale:#E8F5EE;
+  --accent:#E07B39;  --accent-light:#F5D0B5;
+  --gold:#D4A843;    --gold-light:#F5E8C0;
+  --red-earth:#8B2500; --danger:#DC2626; --danger-pale:#FEE2E2;
+  --bg:#F8F3EC; --bg-card:#FFFFFF;
+  --text:#1A1208; --text-muted:#6B5B45; --text-light:#A0917E;
+  --border:#E8DDD0;
+  --sidebar-bg:#0F2419; --sidebar-text:#C8D8C0;
+  --radius:12px; --radius-sm:8px; --radius-xs:6px;
+  --shadow:0 2px 12px rgba(26,60,47,.10);
+  --shadow-md:0 4px 24px rgba(26,60,47,.14);
+  --shadow-lg:0 8px 40px rgba(26,60,47,.18);
+  --sidebar-w:260px;
+  --topbar-h:64px;
+  --transition:.18s ease;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{font-family:'DM Sans',sans-serif;cursor:pointer}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+input,textarea,select{font-family:'DM Sans',sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.flex{display:flex}
+.flex-col{display:flex;flex-direction:column}
+.items-center{align-items:center}
+.justify-between{justify-content:space-between}
+.gap-8{gap:8px}
+.gap-12{gap:12px}
+.gap-16{gap:16px}
+.mb-16{margin-bottom:16px}
+.mb-20{margin-bottom:20px}
+.mb-24{margin-bottom:24px}
+.w-full{width:100%}
+.text-muted{color:var(--text-muted)}
+.text-sm{font-size:13px}
+
+/* ============================================================
+   SKELETON LOADER
+   ============================================================ */
+.skeleton{background:linear-gradient(90deg,var(--border) 25%,#f0e8dc 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skeleton-text{height:14px;margin-bottom:8px;border-radius:4px}
+.skeleton-card{height:120px;border-radius:var(--radius)}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes slideInLeft{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes slideInUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes scaleIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes progAnim{from{width:0}}
+@keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseLive{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.7)}50%{box-shadow:0 0 0 8px rgba(220,38,38,0)}}
+@keyframes blinkBadge{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ============================================================
+   BUTTON SYSTEM
+   ============================================================ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;border:none;transition:var(--transition);white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:white}.btn-primary:hover:not(:disabled){background:var(--primary-light)}
+.btn-accent{background:var(--accent);color:white}.btn-accent:hover:not(:disabled){background:#C1440E}
+.btn-outline{background:none;border:1.5px solid var(--primary);color:var(--primary)}.btn-outline:hover:not(:disabled){background:var(--primary);color:white}
+.btn-ghost{background:none;border:1.5px solid var(--border);color:var(--text-muted)}.btn-ghost:hover:not(:disabled){background:var(--bg);border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:var(--danger);color:white}.btn-danger:hover:not(:disabled){background:#B91C1C}
+.btn-sm{padding:7px 13px;font-size:12px}
+.btn-lg{padding:14px 28px;font-size:15px;width:100%}
+.btn-icon{width:36px;height:36px;padding:0;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;color:var(--text-muted);font-size:18px}.btn-icon:hover{background:var(--bg);color:var(--primary)}
+.btn-spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn.loading .btn-spinner{display:block}
+.btn.loading .btn-text{display:none}
+
+/* ============================================================
+   BADGE / PILL SYSTEM
+   ============================================================ */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.badge-primary{background:var(--primary-pale);color:var(--primary)}
+.badge-accent{background:#FEF0E6;color:var(--accent)}
+.badge-gold{background:var(--gold-light);color:#8B6914}
+.badge-success{background:#DCFCE7;color:#166534}
+.badge-danger{background:var(--danger-pale);color:var(--danger)}
+.badge-neutral{background:#F3F4F6;color:#6B7280}
+.badge-purple{background:#EDE9FE;color:#5B21B6}
+
+/* ============================================================
+   FORM SYSTEM
+   ============================================================ */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:white;transition:border-color var(--transition);outline:none}
+.form-input:focus{border-color:var(--primary)}
+.form-input.error{border-color:var(--danger)}
+.form-input.success{border-color:#16A34A}
+.form-error{font-size:12px;color:var(--danger);margin-top:5px;display:flex;align-items:center;gap:4px}
+.form-error i{font-size:13px}
+.form-hint{font-size:12px;color:var(--text-muted);margin-top:5px}
+.form-select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:white;outline:none;transition:border-color var(--transition);-webkit-appearance:none}
+.form-select:focus{border-color:var(--primary)}
+textarea.form-input{resize:vertical;min-height:100px;line-height:1.6}
+
+/* ============================================================
+   TOGGLE SWITCH
+   ============================================================ */
+.toggle{width:42px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background var(--transition);flex-shrink:0;border:none}
+.toggle[aria-checked="true"]{background:var(--primary)}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:left var(--transition);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle[aria-checked="true"]::after{left:21px}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+.card{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-header h3{font-family:'Playfair Display',serif;font-size:15px;color:var(--text)}
+.card-body{padding:20px}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-wrap{margin-bottom:0}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.progress-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;animation:progAnim .8s ease .2s both}
+.pf-green{background:linear-gradient(90deg,var(--primary-light),var(--primary))}
+.pf-orange{background:linear-gradient(90deg,var(--accent),#C1440E)}
+.pf-gold{background:linear-gradient(90deg,var(--gold),#B8860B)}
+.pf-blue{background:linear-gradient(90deg,#2563EB,#1e3a5f)}
+.pf-purple{background:linear-gradient(90deg,#7C3AED,#5B21B6)}
+
+/* ============================================================
+   KENTE ACCENT STRIP
+   ============================================================ */
+.kente{height:5px;background:repeating-linear-gradient(90deg,var(--accent) 0,var(--accent) 10px,var(--gold) 10px,var(--gold) 20px,var(--primary-light) 20px,var(--primary-light) 30px,#8B1A1A 30px,#8B1A1A 40px);border-radius:3px}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+#login-page{min-height:100vh;display:flex;align-items:stretch}
+.login-left{width:45%;background:var(--sidebar-bg);position:relative;display:flex;flex-direction:column;justify-content:center;padding:60px 56px;overflow:hidden}
+.login-left::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(212,168,67,.05) 0,rgba(212,168,67,.05) 2px,transparent 2px,transparent 18px),repeating-linear-gradient(-45deg,rgba(224,123,57,.03) 0,rgba(224,123,57,.03) 2px,transparent 2px,transparent 18px);pointer-events:none}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:48px}
+.logo-mark{width:42px;height:42px;background:linear-gradient(135deg,var(--accent) 0%,var(--gold) 100%);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white;flex-shrink:0}
+.login-logo-text{font-family:'Playfair Display',serif;font-size:20px;color:white;font-weight:600}
+.login-logo-sub{font-size:11px;color:var(--sidebar-text);font-weight:400}
+.login-hero h1{font-family:'Playfair Display',serif;font-size:40px;color:white;line-height:1.2;margin-bottom:18px}
+.login-hero h1 em{color:var(--gold);font-style:normal}
+.login-hero>p{color:var(--sidebar-text);font-size:14px;line-height:1.75;max-width:360px}
+.login-stats{display:flex;gap:28px;margin-top:28px}
+.login-stat-num{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);font-weight:700}
+.login-stat-label{font-size:11px;color:var(--sidebar-text);margin-top:1px}
+.login-right{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 48px;overflow-y:auto}
+.login-form-box{width:100%;max-width:420px;animation:fadeUp .4s ease}
+.login-form-box h2{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:6px}
+.login-form-box>.login-sub{color:var(--text-muted);margin-bottom:28px;font-size:14px}
+.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.login-divider hr{flex:1;border:none;border-top:1px solid var(--border)}
+.login-divider span{font-size:12px;color:var(--text-light)}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.demo-btn{padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:white;cursor:pointer;text-align:left;transition:all var(--transition)}
+.demo-btn:hover{border-color:var(--primary);background:var(--primary-pale)}
+.demo-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.demo-name{font-size:13px;font-weight:600;color:var(--text)}
+.demo-role{font-size:11px;color:var(--text-muted);margin-top:2px}
+.login-error-banner{background:var(--danger-pale);border:1px solid #FECACA;border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--danger);display:flex;align-items:center;gap:8px;margin-bottom:16px;animation:fadeIn .2s ease}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app{display:none;min-height:100vh}
+.app-layout{display:flex;min-height:100vh}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;overflow-y:auto;overflow-x:hidden;transition:transform var(--transition)}
+.sidebar-logo{padding:18px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-logo .logo-mark{width:32px;height:32px;border-radius:8px;font-size:15px}
+.sb-logo-text{font-family:'Playfair Display',serif;font-size:14px;color:white;font-weight:600;line-height:1.2}
+.sb-logo-sub{font-size:10px;color:var(--sidebar-text)}
+.sidebar-section{padding:16px 10px 4px}
+.sidebar-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(200,216,192,.4);padding:0 8px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--sidebar-text);font-size:13.5px;font-weight:400;transition:background var(--transition);user-select:none;border:none;background:none;width:100%;text-align:left}
+.nav-item i{font-size:18px;flex-shrink:0;opacity:.6;transition:opacity var(--transition)}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item:hover i{opacity:.9}
+.nav-item.active{background:rgba(224,123,57,.18);color:var(--accent)}
+.nav-item.active i{opacity:1;color:var(--accent)}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--accent);color:white;flex-shrink:0}
+.sidebar-user{margin-top:auto;padding:13px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.su-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:white;flex-shrink:0}
+.su-name{font-size:13px;font-weight:600;color:white;line-height:1.2}
+.su-prog{font-size:10px;color:var(--sidebar-text)}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.main-content{margin-left:var(--sidebar-w);flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:0 28px;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.menu-toggle{display:none;width:36px;height:36px;border:1px solid var(--border);border-radius:8px;background:white;font-size:20px;color:var(--text-muted);align-items:center;justify-content:center}
+.topbar-breadcrumb{display:flex;align-items:center;gap:6px}
+.tb-page-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text)}
+.tb-page-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-search-btn{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:13px;color:var(--text-muted);cursor:pointer;transition:all var(--transition)}
+.tb-search-btn:hover{border-color:var(--primary);color:var(--primary)}
+.tb-search-btn kbd{font-size:10px;padding:1px 5px;border:1px solid var(--border);border-radius:3px;background:white}
+.tb-notif-btn{position:relative;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);font-size:18px;transition:all var(--transition)}
+.tb-notif-btn:hover{background:var(--bg);color:var(--primary)}
+.notif-count{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:1.5px solid white}
+.tb-avatar-btn{width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:white;cursor:pointer;border:2px solid transparent;transition:border-color var(--transition)}
+.tb-avatar-btn:hover{border-color:var(--accent)}
+
+/* ============================================================
+   PAGE CONTENT
+   ============================================================ */
+.page-content{padding:24px 28px;flex:1}
+.page-header{margin-bottom:22px}
+.page-header h2{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:3px}
+.page-header p{font-size:13px;color:var(--text-muted)}
+
+/* ============================================================
+   VIEW SYSTEM
+   ============================================================ */
+.view{display:none;animation:fadeUp .25s ease}
+.view.active{display:block}
+
+/* ============================================================
+   DASHBOARD VIEW
+   ============================================================ */
+.welcome-banner{background:var(--primary);border-radius:var(--radius);padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;position:relative;overflow:hidden;gap:20px}
+.welcome-banner::before{content:'';position:absolute;right:-20px;top:-20px;width:180px;height:180px;border-radius:50%;border:40px solid rgba(212,168,67,.1)}
+.welcome-banner::after{content:'';position:absolute;right:100px;bottom:-40px;width:130px;height:130px;border-radius:50%;border:28px solid rgba(224,123,57,.08)}
+.welcome-text h2{font-family:'Playfair Display',serif;font-size:22px;color:white;margin-bottom:6px}
+.welcome-text p{color:rgba(200,216,192,.9);font-size:13px;max-width:400px;line-height:1.7}
+.streak-track{display:flex;gap:5px;margin-top:14px}
+.streak-day{text-align:center}
+.sd-name{font-size:8px;font-weight:700;text-transform:uppercase;color:rgba(200,216,192,.45);margin-bottom:4px;letter-spacing:.05em}
+.sd-dot{width:22px;height:22px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.sd-done{background:var(--gold);color:white}
+.sd-today{background:var(--accent);color:white}
+.sd-upcoming{background:rgba(255,255,255,.1);color:rgba(200,216,192,.45)}
+.welcome-quote{background:rgba(255,255,255,.07);border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;flex-shrink:0;max-width:220px;position:relative;z-index:1}
+.welcome-quote p{font-style:italic;font-size:12px;color:rgba(255,255,255,.85);line-height:1.55}
+.welcome-quote .q-src{font-size:10px;color:var(--gold);margin-top:7px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:white;border-radius:var(--radius);padding:18px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.stat-card-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.stat-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.si-green{background:var(--primary-pale);color:var(--primary)}
+.si-orange{background:#FEF0E6;color:var(--accent)}
+.si-gold{background:var(--gold-light);color:#8B6914}
+.si-purple{background:#EDE9FE;color:#6D28D9}
+.stat-change{font-size:11px;font-weight:600;padding:3px 7px;border-radius:20px}
+.sc-up{background:var(--primary-pale);color:var(--primary)}
+.sc-neutral{background:#F3F4F6;color:#6B7280}
+.stat-value{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:3px}
+.stat-label{font-size:12px;color:var(--text-muted)}
+.dash-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+.link-btn{font-size:13px;color:var(--accent);font-weight:500;cursor:pointer;background:none;border:none;padding:0;transition:color var(--transition)}
+.link-btn:hover{color:var(--primary)}
+.module-list{list-style:none}
+.module-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:padding-left var(--transition)}
+.module-item:last-child{border-bottom:none}
+.module-item:hover{padding-left:4px}
+.mod-status{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ms-done{background:var(--primary-pale);color:var(--primary)}
+.ms-active{background:var(--accent);color:white}
+.ms-locked{background:#F3F4F6;color:#9CA3AF}
+.mod-title{font-size:13px;color:var(--text);flex:1}
+.mod-dur{font-size:11px;color:var(--text-light);white-space:nowrap}
+.ann-item{padding:12px 0;border-bottom:1px solid var(--border)}
+.ann-item:last-child{border-bottom:none}
+.ann-hdr{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.ann-av{width:28px;height:28px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--primary);flex-shrink:0}
+.ann-name{font-size:13px;font-weight:600;color:var(--text)}
+.ann-time{font-size:10px;color:var(--text-light);margin-left:auto}
+.ann-text{font-size:12px;color:var(--text-muted);line-height:1.55;padding-left:36px}
+.dl-item{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)}
+.dl-item:last-child{border-bottom:none}
+.dl-icon{width:34px;height:34px;border-radius:8px;background:#FEF0E6;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--accent);flex-shrink:0}
+.dl-title{font-size:13px;font-weight:500;color:var(--text)}
+.dl-due{font-size:11px;color:var(--text-muted);margin-top:2px}
+.dl-days{margin-left:auto;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.dd-urgent{background:var(--danger-pale);color:var(--danger)}
+.dd-soon{background:var(--gold-light);color:#92400E}
+.dd-ok{background:var(--primary-pale);color:var(--primary)}
+
+/* ============================================================
+   COURSES VIEW
+   ============================================================ */
+.courses-filter{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.filter-btn{padding:7px 15px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all var(--transition)}
+.filter-btn.active{background:var(--primary);border-color:var(--primary);color:white}
+.filter-btn:hover:not(.active){border-color:var(--primary);color:var(--primary);background:var(--primary-pale)}
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.course-card{background:white;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow var(--transition),transform var(--transition);cursor:pointer}
+.course-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.cc-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden}
+.cc-thumb::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 2px,transparent 2px,transparent 10px)}
+.cc-body{padding:14px}
+.cc-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:4px}
+.cc-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--text);margin-bottom:8px;line-height:1.4}
+.cc-meta{display:flex;gap:10px;font-size:11px;color:var(--text-muted);margin-bottom:11px;flex-wrap:wrap}
+.cc-meta span{display:flex;align-items:center;gap:3px}
+.cc-footer{border-top:1px solid var(--border);padding-top:11px;display:flex;align-items:center;justify-content:space-between}
+
+/* ============================================================
+   LESSON VIEW
+   ============================================================ */
+.lesson-layout{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+.video-box{background:var(--sidebar-bg);border-radius:var(--radius);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:18px}
+.video-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);opacity:.85}
+.play-btn-wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:10px}
+.play-btn{width:60px;height:60px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--primary);transition:transform var(--transition);border:none}
+.video-box:hover .play-btn{transform:scale(1.08)}
+.video-ttl{font-size:13px;color:rgba(255,255,255,.8)}
+.lesson-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:18px}
+.ltab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color var(--transition)}
+.ltab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.ltab:hover:not(.active){color:var(--text)}
+.lesson-prose h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);margin:18px 0 9px}
+.lesson-prose h3:first-child{margin-top:0}
+.lesson-prose p{font-size:13px;line-height:1.8;color:var(--text-muted);margin-bottom:12px}
+.lesson-prose code{background:#F3F4F6;padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace;color:#C1440E}
+.lesson-prose pre{background:var(--sidebar-bg);color:#C8D8C0;padding:14px 16px;border-radius:8px;font-size:12px;overflow-x:auto;margin:12px 0;line-height:1.7;tab-size:2}
+.african-insight{font-style:italic;color:var(--text-muted);border-left:3px solid var(--gold);padding:11px 15px;margin:14px 0;background:var(--gold-light);border-radius:0 8px 8px 0;font-size:13px;line-height:1.6}
+.lsbar{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:sticky;top:calc(var(--topbar-h) + 16px)}
+.lsbar-title{padding:11px 14px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border);background:var(--bg)}
+.lmod-item{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;font-size:13px;color:var(--text);transition:background var(--transition)}
+.lmod-item:hover{background:var(--bg)}
+.lmod-item.current{background:var(--primary-pale);color:var(--primary);font-weight:600}
+.lmod-item:last-child{border-bottom:none}
+.lmod-item i{font-size:15px;flex-shrink:0}
+.xp-reward{background:var(--gold-light);border:1px solid #E8C96A;border-radius:var(--radius);padding:14px;margin-top:14px}
+.quiz-wrap{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.quiz-q{font-size:15px;font-weight:600;color:var(--text);margin-bottom:14px;line-height:1.4}
+.quiz-opts{list-style:none;display:flex;flex-direction:column;gap:9px}
+.quiz-opt{display:flex;align-items:center;gap:11px;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all var(--transition);font-size:14px;color:var(--text)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-pale)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-pale)}
+.quiz-opt.correct{border-color:#16A34A;background:#DCFCE7;color:#166534}
+.quiz-opt.wrong{border-color:var(--danger);background:var(--danger-pale);color:var(--danger)}
+.quiz-opt.disabled{pointer-events:none}
+.opt-letter{width:26px;height:26px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+
+/* ============================================================
+   ASSIGNMENTS VIEW
+   ============================================================ */
+.assign-tabs{display:flex;gap:4px;background:var(--bg);padding:4px;border-radius:8px;margin-bottom:18px;width:fit-content}
+.atab{padding:6px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text-muted);transition:all var(--transition)}
+.atab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.assign-card{background:white;border-radius:var(--radius);border:1px solid var(--border);padding:18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;box-shadow:var(--shadow);transition:box-shadow var(--transition)}
+.assign-card:hover{box-shadow:var(--shadow-md)}
+.at-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.assign-info{flex:1;min-width:0}
+.a-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.a-course{font-size:12px;color:var(--text-muted);margin-bottom:9px}
+.a-meta{display:flex;gap:12px;font-size:11px;color:var(--text-muted);flex-wrap:wrap}
+.a-meta span{display:flex;align-items:center;gap:3px}
+.assign-act{flex-shrink:0}
+
+/* ============================================================
+   LEADERBOARD VIEW
+   ============================================================ */
+.lb-podium{display:flex;align-items:flex-end;justify-content:center;gap:20px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:18px}
+.lb-pod-item{display:flex;flex-direction:column;align-items:center;gap:7px}
+.lb-pod-av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:white;position:relative}
+.lb-crown{position:absolute;top:-17px;font-size:18px}
+.lb-pod-name{font-size:12px;font-weight:600;color:var(--text);text-align:center}
+.lb-pod-score{font-size:11px;color:var(--text-muted)}
+.lb-pod-stand{border-radius:6px 6px 0 0;width:68px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:rgba(255,255,255,.85)}
+.lb-tbl-wrap{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:auto}
+.lb-tbl{width:100%;border-collapse:collapse;min-width:600px}
+.lb-tbl thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg);white-space:nowrap}
+.lb-tbl tbody tr{border-bottom:1px solid var(--border);transition:background var(--transition)}
+.lb-tbl tbody tr:last-child{border-bottom:none}
+.lb-tbl tbody tr:hover{background:var(--bg)}
+.lb-tbl tbody td{padding:12px 14px;font-size:13px;color:var(--text)}
+.lb-rank{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--text-muted)}
+.lb-rank.r1{color:var(--gold)}.lb-rank.r2{color:#9CA3AF}.lb-rank.r3{color:#C27B4B}
+.lb-stu{display:flex;align-items:center;gap:10px}
+.lb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:white;flex-shrink:0}
+.lb-score{font-weight:600;color:var(--primary)}
+.you-row{background:#FFFBF5!important;border-left:3px solid var(--gold)}
+
+/* ============================================================
+   PROFILE VIEW
+   ============================================================ */
+.profile-hdr{background:var(--primary);border-radius:var(--radius);padding:28px;margin-bottom:20px;position:relative;overflow:hidden}
+.profile-hdr::before{content:'';position:absolute;right:-30px;top:-30px;width:180px;height:180px;border-radius:50%;border:45px solid rgba(212,168,67,.08)}
+.profile-hdr::after{content:'';position:absolute;right:110px;bottom:-45px;width:150px;height:150px;border-radius:50%;border:32px solid rgba(224,123,57,.07)}
+.profile-top{display:flex;align-items:center;gap:18px;position:relative;z-index:1}
+.profile-avatar{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--accent) 0%,var(--gold) 100%);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:white;border:3px solid rgba(255,255,255,.2);flex-shrink:0}
+.profile-info h2{font-family:'Playfair Display',serif;font-size:20px;color:white;margin-bottom:3px}
+.profile-info p{color:rgba(200,216,192,.85);font-size:13px}
+.profile-badges{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;position:relative;z-index:1}
+.pb{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.profile-sec{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.profile-sec h3{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--border)}
+.pf{margin-bottom:13px}
+.pf label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-light);margin-bottom:3px;display:block}
+.pf .fv{font-size:13px;color:var(--text);font-weight:500}
+.skill-bar{margin-bottom:11px}
+.skb-lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.skb-lbl span:first-child{color:var(--text)}.skb-lbl span:last-child{color:var(--text-muted);font-weight:600}
+.ach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ach-item{padding:11px 8px;border-radius:8px;border:1px solid var(--border);transition:border-color var(--transition);text-align:center;cursor:pointer}
+.ach-item:hover{border-color:var(--primary)}
+.ach-icon{font-size:22px;margin-bottom:5px}
+.ach-name{font-size:10px;font-weight:600;color:var(--text);display:block}
+.ach-date{font-size:9px;color:var(--text-light)}
+.ach-item.locked{opacity:.4}
+
+/* ============================================================
+   CALENDAR VIEW
+   ============================================================ */
+.cal-layout{display:grid;grid-template-columns:1fr 260px;gap:18px}
+.cal-nav-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav-row h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;min-width:160px;text-align:center}
+.cal-nav-btns{display:flex;gap:8px}
+.cal-grid-wrap{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--bg);border-bottom:1px solid var(--border)}
+.cal-dow-cell{text-align:center;padding:9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-day{min-height:85px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px;cursor:pointer;transition:background var(--transition);position:relative}
+.cal-day:nth-child(7n){border-right:none}
+.cal-day:hover{background:#FFFBF5}
+.cal-day.other-month{background:var(--bg)}
+.cal-day.today{background:var(--primary-pale)}
+.cal-day.today .day-num{background:var(--primary);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.day-num{font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.cal-event{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.ce-green{background:var(--primary-pale);color:var(--primary)}
+.ce-orange{background:#FEF0E6;color:var(--accent)}
+.ce-gold{background:var(--gold-light);color:#8B6914}
+.ce-red{background:var(--danger-pale);color:var(--danger)}
+.ce-purple{background:#EDE9FE;color:#5B21B6}
+.ev-item{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);align-items:flex-start}
+.ev-item:last-child{border-bottom:none}
+.ev-item:hover{background:var(--bg)}
+.ev-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ev-info h5{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.ev-info p{font-size:11px;color:var(--text-muted);line-height:1.45}
+.ev-time{font-size:10px;font-weight:600;color:var(--text-light);margin-left:auto;white-space:nowrap}
+
+/* ============================================================
+   GRADES VIEW
+   ============================================================ */
+.grades-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.grade-big-card{background:white;border-radius:var(--radius);border:1px solid var(--border);padding:18px;box-shadow:var(--shadow);text-align:center}
+.gpa-ring{width:84px;height:84px;margin:0 auto 10px;position:relative}
+.gpa-ring svg{transform:rotate(-90deg)}
+.gpa-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--primary)}
+.grade-tbl-wrap{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:auto}
+.grade-tbl{width:100%;border-collapse:collapse;min-width:500px}
+.grade-tbl thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg)}
+.grade-tbl tbody tr{border-bottom:1px solid var(--border)}
+.grade-tbl tbody tr:last-child{border-bottom:none}
+.grade-tbl tbody tr:hover{background:var(--bg)}
+.grade-tbl td{padding:13px 14px;font-size:13px;color:var(--text)}
+.grade-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.gp-a{background:#DCFCE7;color:#166534}.gp-b{background:var(--primary-pale);color:var(--primary)}
+.gp-c{background:var(--gold-light);color:#92400E}.gp-p{background:#F3F4F6;color:#6B7280}
+
+/* ============================================================
+   CERTIFICATES VIEW
+   ============================================================ */
+.certs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.cert-card{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);transition:box-shadow var(--transition),transform var(--transition)}
+.cert-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.cert-preview{height:170px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cert-inner{background:white;border:2px solid var(--gold);border-radius:8px;padding:18px 22px;text-align:center;width:84%;position:relative;z-index:1}
+.cert-inner::before{content:'';position:absolute;inset:4px;border:1px solid rgba(212,168,67,.25);border-radius:5px;pointer-events:none}
+.cert-logo{font-family:'Playfair Display',serif;font-size:10px;color:var(--primary);font-weight:700;margin-bottom:3px;letter-spacing:.09em;text-transform:uppercase}
+.cert-title-big{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;color:var(--text);margin:3px 0;line-height:1.3}
+.cert-name-big{font-family:'Playfair Display',serif;font-size:10px;font-style:italic;color:var(--accent)}
+.cert-seal{width:26px;height:26px;background:linear-gradient(135deg,var(--gold) 0%,var(--accent) 100%);border-radius:50%;margin:5px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px}
+.cert-body{padding:14px;border-top:1px solid var(--border)}
+.cert-course-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.cert-meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px}
+.cert-date{font-size:11px;color:var(--text-muted)}
+.cert-locked{opacity:.55;filter:grayscale(1)}
+
+/* ============================================================
+   LIVE SESSIONS VIEW
+   ============================================================ */
+.live-banner{background:var(--red-earth);border-radius:var(--radius);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.live-dot{width:11px;height:11px;border-radius:50%;background:#FF4444;animation:pulseLive 1.5s infinite;flex-shrink:0}
+.live-banner h3{font-family:'Playfair Display',serif;font-size:15px;color:white;margin-bottom:2px}
+.live-banner p{font-size:12px;color:rgba(255,255,255,.75)}
+.sess-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:18px}
+.sess-card{background:white;border-radius:var(--radius);border:1px solid var(--border);padding:16px;box-shadow:var(--shadow)}
+.sess-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:11px}
+.sess-status{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px}
+.ss-live{background:var(--danger-pale);color:var(--danger);animation:blinkBadge .8s infinite}
+.ss-soon{background:var(--gold-light);color:#8B6914}
+.ss-done{background:#F3F4F6;color:#6B7280}
+.ss-upcoming{background:var(--primary-pale);color:var(--primary)}
+.sess-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--text);margin-bottom:5px}
+.sess-info{font-size:12px;color:var(--text-muted);line-height:1.5}
+.sess-meta{display:flex;gap:9px;margin:10px 0;font-size:11px;color:var(--text-muted);flex-wrap:wrap}
+.sess-meta span{display:flex;align-items:center;gap:3px}
+.sess-footer{border-top:1px solid var(--border);padding-top:11px;display:flex;gap:7px;flex-wrap:wrap}
+
+/* ============================================================
+   FORUM VIEW
+   ============================================================ */
+.forum-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:20px}
+.forum-cat{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px;cursor:pointer;transition:all var(--transition);text-align:center}
+.forum-cat:hover{border-color:var(--primary);background:var(--primary-pale)}
+.fc-icon{font-size:26px;margin-bottom:6px}
+.fc-name{font-size:12px;font-weight:600;color:var(--text)}
+.fc-count{font-size:10px;color:var(--text-muted);margin-top:2px}
+.thread-list{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.thread-item{display:flex;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);align-items:flex-start}
+.thread-item:hover{background:var(--bg)}
+.thread-item:last-child{border-bottom:none}
+.thread-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:white;flex-shrink:0;margin-top:2px}
+.thread-main{flex:1;min-width:0}
+.thread-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.thread-preview{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}
+.thread-tags{display:flex;gap:5px;flex-wrap:wrap}
+.ttag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--bg);color:var(--text-muted)}
+.thread-stats{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.thread-stats span{font-size:10px;color:var(--text-light);display:flex;align-items:center;gap:3px}
+.new-pill{background:var(--accent);color:white;font-size:8px;font-weight:700;padding:1px 5px;border-radius:10px}
+.forum-compose{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+
+/* ============================================================
+   SETTINGS VIEW
+   ============================================================ */
+.settings-layout{display:grid;grid-template-columns:200px 1fr;gap:18px}
+.settings-nav{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;align-self:start}
+.snav-item{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;font-size:13px;color:var(--text-muted);border-bottom:1px solid var(--border);transition:background var(--transition);border:none;background:none;width:100%;text-align:left}
+.snav-item:last-child{border-bottom:none}
+.snav-item:hover{background:var(--bg)}
+.snav-item.active{background:var(--primary-pale);color:var(--primary);font-weight:600;border-right:2px solid var(--primary)}
+.snav-item i{font-size:17px;flex-shrink:0}
+.settings-body{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.settings-section{margin-bottom:26px}
+.settings-section:last-child{margin-bottom:0}
+.settings-section h3{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:3px}
+.settings-section .ss-desc{font-size:12px;color:var(--text-muted);margin-bottom:16px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.sr-info h5{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.sr-info p{font-size:12px;color:var(--text-muted)}
+
+/* ============================================================
+   ADMIN PANEL VIEW
+   ============================================================ */
+.role-banner{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:13px 18px;margin-bottom:18px}
+.role-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.admin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.admin-stat{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.cohort-tbl-wrap{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:auto}
+.cohort-tbl{width:100%;border-collapse:collapse;min-width:600px}
+.cohort-tbl thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg);white-space:nowrap}
+.cohort-tbl tbody tr{border-bottom:1px solid var(--border)}
+.cohort-tbl tbody tr:last-child{border-bottom:none}
+.cohort-tbl tbody tr:hover{background:var(--bg)}
+.cohort-tbl td{padding:11px 14px;font-size:13px;color:var(--text)}
+.risk-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.rb-high{background:var(--danger-pale);color:var(--danger)}
+.rb-med{background:var(--gold-light);color:#92400E}
+.rb-low{background:var(--primary-pale);color:var(--primary)}
+
+/* ============================================================
+   NOTIFICATIONS PANEL
+   ============================================================ */
+.notif-overlay{position:fixed;inset:0;z-index:500;display:none}
+.notif-overlay.open{display:flex}
+.notif-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.notif-panel{position:absolute;right:0;top:0;width:360px;height:100vh;background:white;border-left:1px solid var(--border);display:flex;flex-direction:column;animation:slideInRight .22s ease;overflow:hidden}
+.np-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--sidebar-bg)}
+.np-header h3{font-family:'Playfair Display',serif;color:white;font-size:15px}
+.np-actions{display:flex;gap:8px;align-items:center}
+.np-mark-all{font-size:11px;color:var(--sidebar-text);background:none;border:none;cursor:pointer;text-decoration:underline}
+.np-close{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:16px;border:none}
+.notif-list{flex:1;overflow-y:auto}
+.notif-item{display:flex;gap:11px;padding:13px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition)}
+.notif-item:hover{background:var(--bg)}
+.notif-item.unread{background:#FFFBF5;border-left:3px solid var(--gold)}
+.ni-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ni-text strong{font-size:12px;color:var(--text);display:block;margin-bottom:2px}
+.ni-text p{font-size:11px;color:var(--text-muted);line-height:1.45}
+.ni-time{font-size:10px;color:var(--text-light);margin-top:3px;display:block}
+.np-empty{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:13px}
+
+/* ============================================================
+   SEARCH OVERLAY
+   ============================================================ */
+.search-overlay{position:fixed;inset:0;z-index:600;background:rgba(15,36,25,.8);display:none;align-items:flex-start;justify-content:center;padding-top:70px}
+.search-overlay.open{display:flex;animation:fadeIn .18s ease}
+.search-box{background:white;border-radius:14px;width:580px;max-width:94vw;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:scaleIn .2s ease}
+.search-input-wrap{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border)}
+.search-input-wrap i{font-size:20px;color:var(--text-muted);flex-shrink:0}
+.search-input-wrap input{flex:1;border:none;outline:none;font-size:15px;color:var(--text);background:transparent}
+.search-clear{font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;flex-shrink:0}
+.search-results{max-height:380px;overflow-y:auto}
+.sr-section-head{padding:9px 18px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-light);background:var(--bg)}
+.sr-item{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;transition:background var(--transition)}
+.sr-item:hover{background:var(--bg)}
+.sr-item i{font-size:19px;color:var(--text-muted);flex-shrink:0}
+.sr-item-title{font-size:13px;font-weight:500;color:var(--text)}
+.sr-item-sub{font-size:11px;color:var(--text-muted)}
+.search-close-hint{text-align:center;padding:9px;font-size:11px;color:var(--text-light);border-top:1px solid var(--border)}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex;animation:fadeIn .18s ease}
+.modal{background:white;border-radius:var(--radius);max-width:480px;width:100%;box-shadow:var(--shadow-lg);animation:scaleIn .22s ease}
+.modal-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{font-family:'Playfair Display',serif;font-size:16px}
+.modal-close{width:30px;height:30px;border-radius:6px;background:var(--bg);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-muted)}
+.modal-body{padding:20px}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+
+/* ============================================================
+   TOAST SYSTEM
+   ============================================================ */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--text);color:white;padding:12px 18px;border-radius:9px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px;box-shadow:0 4px 20px rgba(0,0,0,.25);animation:slideInUp .3s ease;min-width:260px;max-width:380px}
+.toast i{font-size:17px;flex-shrink:0}
+.toast.toast-success i{color:#4ADE80}
+.toast.toast-error{background:var(--danger)} .toast.toast-error i{color:white}
+.toast.toast-info i{color:var(--gold)}
+.toast.toast-warning{background:#92400E} .toast.toast-warning i{color:var(--gold)}
+.toast.hiding{animation:fadeIn .3s ease reverse}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-muted)}
+.empty-state .es-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-state h4{font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin-bottom:6px}
+.empty-state p{font-size:13px;line-height:1.6}
+
+/* ============================================================
+   LOADING STATE
+   ============================================================ */
+.loading-overlay{position:fixed;inset:0;z-index:800;background:var(--sidebar-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.loading-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+.loading-text{color:var(--sidebar-text);font-size:14px;letter-spacing:.03em}
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
+@media(max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-grid{grid-template-columns:1fr}
+  .courses-grid{grid-template-columns:repeat(2,1fr)}
+  .ach-grid{grid-template-columns:repeat(3,1fr)}
+  .certs-grid{grid-template-columns:1fr}
+  .forum-cats{grid-template-columns:repeat(2,1fr)}
+  .sess-grid{grid-template-columns:1fr}
+  .admin-grid{grid-template-columns:repeat(2,1fr)}
+  .grades-overview{grid-template-columns:repeat(2,1fr)}
+  .settings-layout{grid-template-columns:1fr}
+  .settings-nav{display:flex;flex-wrap:wrap;border-radius:var(--radius)}
+  .snav-item{border-right:1px solid var(--border);border-bottom:1px solid var(--border);flex:1;min-width:120px;justify-content:center}
+  .snav-item.active{border-right-color:var(--border);border-bottom:2px solid var(--primary)}
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+@media(max-width:768px){
+  :root{--sidebar-w:260px}
+  .sidebar{transform:translateX(-100%);box-shadow:var(--shadow-lg)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main-content{margin-left:0}
+  .menu-toggle{display:flex}
+  .topbar{padding:0 16px}
+  .page-content{padding:16px}
+  .tb-search-btn span{display:none}
+  .tb-search-btn kbd{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .welcome-banner{flex-direction:column}
+  .welcome-quote{max-width:100%}
+  .dash-grid{grid-template-columns:1fr}
+  .courses-grid{grid-template-columns:1fr}
+  .lesson-layout{grid-template-columns:1fr}
+  .lb-podium{gap:12px}
+  .lb-pod-av{width:44px;height:44px;font-size:15px}
+  .lb-pod-stand{width:56px}
+  .profile-grid{grid-template-columns:1fr}
+  .cal-layout{grid-template-columns:1fr}
+  .ach-grid{grid-template-columns:repeat(2,1fr)}
+  .certs-grid{grid-template-columns:1fr}
+  .forum-cats{grid-template-columns:repeat(2,1fr)}
+  .settings-layout{grid-template-columns:1fr}
+  .demo-grid{grid-template-columns:1fr}
+  .login-page-mobile{flex-direction:column}
+  .login-left{width:100%;padding:32px 24px;min-height:auto}
+  .login-hero h1{font-size:28px}
+  .login-right{padding:32px 24px}
+  .admin-grid{grid-template-columns:1fr 1fr}
+  .notif-panel{width:100%;max-width:100%}
+  .page-header{flex-direction:column;align-items:flex-start;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING SCREEN
+     ============================================================ -->
+<div class="loading-overlay" id="loading-screen" aria-label="Loading Ubuntu Academy" role="status">
+  <div class="logo-mark" style="width:54px;height:54px;border-radius:12px;font-size:24px;margin-bottom:8px">U</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading Ubuntu Academy…</div>
+</div>
+
+<!-- ============================================================
+     LOGIN PAGE
+     ============================================================ -->
+<main id="login-page" style="display:none" role="main" aria-label="Login">
+  <div class="login-left" aria-hidden="true">
+    <div class="login-logo">
+      <div class="logo-mark" role="img" aria-label="Ubuntu Academy logo">U</div>
+      <div>
+        <div class="login-logo-text">Ubuntu Academy</div>
+        <div class="login-logo-sub">Power Learn Project Africa</div>
+      </div>
+    </div>
+    <div class="login-hero">
+      <h1>Learn. Grow.<br><em>Lead Africa.</em></h1>
+      <p>A world-class learning platform built for Africa's next generation of tech leaders. Join thousands of learners across the continent.</p>
+      <div class="kente" style="margin:24px 0"></div>
+      <div class="login-stats">
+        <div><div class="login-stat-num">45K+</div><div class="login-stat-label">Active Learners</div></div>
+        <div><div class="login-stat-num">16</div><div class="login-stat-label">Countries</div></div>
+        <div><div class="login-stat-num">94%</div><div class="login-stat-label">Completion Rate</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-form-box">
+      <h2>Welcome back</h2>
+      <p class="login-sub">Sign in to continue your learning journey</p>
+      <div id="login-error-banner" class="login-error-banner hidden" role="alert" aria-live="polite">
+        <i class="ti ti-alert-circle"></i><span id="login-error-msg">Invalid email or password.</span>
+      </div>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email address</label>
+          <input class="form-input" type="email" id="login-email" name="email" placeholder="you@email.com" autocomplete="email" required aria-required="true">
+          <div class="form-error hidden" id="email-error"><i class="ti ti-alert-circle"></i><span>Please enter a valid email.</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input class="form-input" type="password" id="login-password" name="password" placeholder="Enter password" autocomplete="current-password" required minlength="6" aria-required="true">
+          <div class="form-error hidden" id="pw-error"><i class="ti ti-alert-circle"></i><span>Password must be at least 6 characters.</span></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="login-btn" aria-label="Sign in">
+          <span class="btn-spinner" role="status" aria-label="Signing in"></span>
+          <span class="btn-text">Sign in to Academy</span>
+        </button>
+      </form>
+      <div class="login-divider"><hr><span>or sign in as</span><hr></div>
+      <div class="demo-grid" role="group" aria-label="Demo accounts">
+        <button class="demo-btn" data-demo="student" aria-label="Login as Amara Diallo, student"><div class="demo-name">Amara Diallo</div><div class="demo-role">🎓 Software Engineering</div></button>
+        <button class="demo-btn" data-demo="mentor" aria-label="Login as Dr. Kwame Osei, instructor"><div class="demo-name">Dr. Kwame Osei</div><div class="demo-role">📚 Course Instructor</div></button>
+        <button class="demo-btn" data-demo="student2" aria-label="Login as Aisha Kamara, student"><div class="demo-name">Aisha Kamara</div><div class="demo-role">🎓 Data Science Track</div></button>
+        <button class="demo-btn" data-demo="admin" aria-label="Login as Nkechi Adeyemi, admin"><div class="demo-name">Nkechi Adeyemi</div><div class="demo-role">⚙️ Program Manager</div></button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
+<div id="app" style="display:none" role="application" aria-label="Ubuntu Academy">
+  <div class="app-layout">
+
+    <!-- ===== SIDEBAR OVERLAY (mobile) ===== -->
+    <div class="sidebar-overlay" id="sidebar-overlay" role="presentation" aria-hidden="true"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar-logo">
+        <div class="logo-mark" style="width:32px;height:32px;border-radius:8px;font-size:15px" aria-hidden="true">U</div>
+        <div><div class="sb-logo-text">Ubuntu Academy</div><div class="sb-logo-sub">Power Learn Project Africa</div></div>
+      </div>
+      <div class="kente"></div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label" aria-hidden="true">Main</div>
+        <button class="nav-item active" data-view="dashboard" aria-current="page"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</button>
+        <button class="nav-item" data-view="courses"><i class="ti ti-books" aria-hidden="true"></i>My Courses</button>
+        <button class="nav-item" data-view="assignments"><i class="ti ti-clipboard-list" aria-hidden="true"></i>Assignments<span class="nav-badge" id="assign-badge" aria-label="3 pending">3</span></button>
+        <button class="nav-item" data-view="lesson"><i class="ti ti-player-play" aria-hidden="true"></i>Continue Learning</button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label" aria-hidden="true">Schedule &amp; Progress</div>
+        <button class="nav-item" data-view="calendar"><i class="ti ti-calendar" aria-hidden="true"></i>Schedule</button>
+        <button class="nav-item" data-view="live"><i class="ti ti-video" aria-hidden="true"></i>Live Sessions<span class="nav-badge" style="background:var(--danger)" aria-label="1 live">1</span></button>
+        <button class="nav-item" data-view="grades"><i class="ti ti-chart-bar" aria-hidden="true"></i>Grades</button>
+        <button class="nav-item" data-view="certificates"><i class="ti ti-certificate" aria-hidden="true"></i>Certificates</button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label" aria-hidden="true">Community</div>
+        <button class="nav-item" data-view="leaderboard"><i class="ti ti-trophy" aria-hidden="true"></i>Leaderboard</button>
+        <button class="nav-item" data-view="forum"><i class="ti ti-messages" aria-hidden="true"></i>Discussion Forum</button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label" aria-hidden="true">Account</div>
+        <button class="nav-item" data-view="profile"><i class="ti ti-user" aria-hidden="true"></i>My Profile</button>
+        <button class="nav-item" data-view="settings"><i class="ti ti-settings" aria-hidden="true"></i>Settings</button>
+        <button class="nav-item" data-view="admin" id="admin-nav" style="display:none"><i class="ti ti-shield" aria-hidden="true"></i>Admin Panel</button>
+        <button class="nav-item" id="logout-btn"><i class="ti ti-logout" aria-hidden="true"></i>Sign Out</button>
+      </div>
+
+      <div class="sidebar-user" role="status" aria-label="Current user">
+        <div class="su-avatar" id="sb-avatar" aria-hidden="true">AD</div>
+        <div><div class="su-name" id="sb-name">Amara Diallo</div><div class="su-prog" id="sb-prog">Software Engineering</div></div>
+      </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content" id="main-content">
+
+      <!-- TOPBAR -->
+      <header class="topbar" role="banner">
+        <div class="topbar-left">
+          <button class="menu-toggle btn-icon" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="sidebar">
+            <i class="ti ti-menu-2" aria-hidden="true"></i>
+          </button>
+          <div class="topbar-breadcrumb">
+            <div><div class="tb-page-title" id="tb-title">Dashboard</div><div class="tb-page-sub" id="tb-sub">Your learning overview</div></div>
+          </div>
+        </div>
+        <div class="topbar-right" role="toolbar" aria-label="Header actions">
+          <button class="tb-search-btn" id="open-search" aria-label="Search (Ctrl+K)">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <span>Search…</span><kbd aria-hidden="true">⌘K</kbd>
+          </button>
+          <button class="tb-notif-btn" id="open-notifs" aria-label="Notifications" aria-haspopup="dialog">
+            <i class="ti ti-bell" aria-hidden="true"></i>
+            <div class="notif-count" id="notif-dot" aria-hidden="true"></div>
+          </button>
+          <button class="tb-avatar-btn" id="tb-avatar" aria-label="My profile" data-view="profile">AD</button>
+        </div>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <div class="page-content" id="page-content" role="main">
+
+        <!-- ============================================================
+             DASHBOARD VIEW
+             ============================================================ -->
+        <section class="view active" id="view-dashboard" aria-label="Dashboard">
+          <div class="welcome-banner">
+            <div class="welcome-text">
+              <h2 id="welcome-msg">Good morning, Amara! 🌅</h2>
+              <p>You're on a <strong style="color:var(--gold)">7-day streak</strong>! You're in the top 15% of your cohort. Next milestone: complete Module 4 by Friday.</p>
+              <div class="streak-track" aria-label="Weekly streak" role="img">
+                <div class="streak-day"><div class="sd-name">M</div><div class="sd-dot sd-done" title="Monday — complete"><i class="ti ti-check" style="font-size:9px"></i></div></div>
+                <div class="streak-day"><div class="sd-name">T</div><div class="sd-dot sd-done" title="Tuesday — complete"><i class="ti ti-check" style="font-size:9px"></i></div></div>
+                <div class="streak-day"><div class="sd-name">W</div><div class="sd-dot sd-done" title="Wednesday — complete"><i class="ti ti-check" style="font-size:9px"></i></div></div>
+                <div class="streak-day"><div class="sd-name">T</div><div class="sd-dot sd-done" title="Thursday — complete"><i class="ti ti-check" style="font-size:9px"></i></div></div>
+                <div class="streak-day"><div class="sd-name">F</div><div class="sd-dot sd-today" title="Today">5</div></div>
+                <div class="streak-day"><div class="sd-name">S</div><div class="sd-dot sd-upcoming" title="Upcoming">6</div></div>
+                <div class="streak-day"><div class="sd-name">S</div><div class="sd-dot sd-upcoming" title="Upcoming">7</div></div>
+              </div>
+            </div>
+            <div class="welcome-quote" role="blockquote" aria-label="African proverb of the day">
+              <p>"Ubuntu ngumuntu ngabantu — I am because we are."</p>
+              <div class="q-src">— African Proverb</div>
+            </div>
+          </div>
+
+          <div class="stats-grid" role="list" aria-label="Progress statistics">
+            <article class="stat-card" role="listitem">
+              <div class="stat-card-hdr"><div class="stat-icon si-green" aria-hidden="true"><i class="ti ti-flame"></i></div><span class="stat-change sc-up" aria-label="Up 2 this week">↑ +2</span></div>
+              <div class="stat-value" aria-label="7 day streak">7</div><div class="stat-label">Day Streak 🔥</div>
+            </article>
+            <article class="stat-card" role="listitem">
+              <div class="stat-card-hdr"><div class="stat-icon si-orange" aria-hidden="true"><i class="ti ti-bolt"></i></div><span class="stat-change sc-up">↑ 340 xp</span></div>
+              <div class="stat-value">4,820</div><div class="stat-label">XP Points Earned</div>
+            </article>
+            <article class="stat-card" role="listitem">
+              <div class="stat-card-hdr"><div class="stat-icon si-gold" aria-hidden="true"><i class="ti ti-trophy"></i></div><span class="stat-change sc-up">↑ +3</span></div>
+              <div class="stat-value">#12</div><div class="stat-label">Cohort Ranking</div>
+            </article>
+            <article class="stat-card" role="listitem">
+              <div class="stat-card-hdr"><div class="stat-icon si-purple" aria-hidden="true"><i class="ti ti-certificate"></i></div><span class="stat-change sc-neutral">2 of 4</span></div>
+              <div class="stat-value">2</div><div class="stat-label">Courses Completed</div>
+            </article>
+          </div>
+
+          <div class="dash-grid">
+            <div>
+              <div class="card mb-20">
+                <div class="card-header"><h3>Current Course Progress</h3><button class="link-btn" data-view="courses" aria-label="View all courses">View all →</button></div>
+                <div class="card-body">
+                  <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:16px">
+                    <div style="width:46px;height:46px;border-radius:10px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0" aria-hidden="true">🐍</div>
+                    <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px">Python Programming Fundamentals</div><div style="font-size:12px;color:var(--text-muted)">Software Engineering Track · Module 4 of 8</div></div>
+                  </div>
+                  <div class="progress-wrap mb-16"><div class="progress-label"><span>Progress</span><span>47%</span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:47%" role="progressbar" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100"></div></div></div>
+                  <ul class="module-list" role="list" aria-label="Course modules">
+                    <li class="module-item" role="listitem" tabindex="0" data-view="lesson"><div class="mod-status ms-done" aria-label="Completed"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i></div><div class="mod-title">Introduction to Python &amp; Environment Setup</div><div class="mod-dur">45 min</div></li>
+                    <li class="module-item" role="listitem" tabindex="0" data-view="lesson"><div class="mod-status ms-done" aria-label="Completed"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i></div><div class="mod-title">Variables, Data Types &amp; Operators</div><div class="mod-dur">60 min</div></li>
+                    <li class="module-item" role="listitem" tabindex="0" data-view="lesson"><div class="mod-status ms-done" aria-label="Completed"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i></div><div class="mod-title">Control Flow: If/Else &amp; Loops</div><div class="mod-dur">75 min</div></li>
+                    <li class="module-item" role="listitem" tabindex="0" data-view="lesson"><div class="mod-status ms-active" aria-label="In progress"><i class="ti ti-player-play" style="font-size:11px" aria-hidden="true"></i></div><div class="mod-title"><strong>Functions &amp; Scope</strong> — In Progress</div><div class="mod-dur">80 min</div></li>
+                    <li class="module-item" role="listitem" aria-disabled="true"><div class="mod-status ms-locked" aria-label="Locked"><i class="ti ti-lock" style="font-size:12px" aria-hidden="true"></i></div><div class="mod-title" style="color:var(--text-light)">Data Structures: Lists, Dicts &amp; Tuples</div><div class="mod-dur">90 min</div></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><h3>Web Development Fundamentals</h3><button class="link-btn" data-view="lesson">Continue →</button></div>
+                <div class="card-body">
+                  <div class="progress-wrap mb-16"><div class="progress-label"><span>Module 6 of 10 · 60% complete</span><span>60%</span></div><div class="progress-track"><div class="progress-fill pf-orange" style="width:60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div></div></div>
+                  <div style="display:flex;gap:7px;flex-wrap:wrap">
+                    <span class="badge badge-primary"><i class="ti ti-check" style="font-size:10px"></i> HTML &amp; CSS</span>
+                    <span class="badge badge-primary"><i class="ti ti-check" style="font-size:10px"></i> Flexbox &amp; Grid</span>
+                    <span class="badge badge-accent"><i class="ti ti-player-play" style="font-size:10px"></i> JavaScript</span>
+                    <span class="badge badge-neutral">React Basics</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <div class="card">
+                <div class="card-header"><h3>📢 Announcements</h3><span class="badge badge-primary" aria-label="2 new announcements">2 new</span></div>
+                <div class="card-body" style="padding:0">
+                  <div class="ann-item" style="padding:12px 16px"><div class="ann-hdr"><div class="ann-av">KO</div><span class="ann-name">Dr. Kwame Osei</span><span class="ann-time">2h ago</span></div><p class="ann-text">Module 4 assignment updated — review the new submission guidelines before Friday.</p></div>
+                  <div class="ann-item" style="padding:12px 16px"><div class="ann-hdr"><div class="ann-av" style="background:#FEF0E6;color:var(--accent)">NA</div><span class="ann-name">Nkechi Adeyemi</span><span class="ann-time">Yesterday</span></div><p class="ann-text">🎉 Top learners this week: Amara, Kofi &amp; Zainab — amazing work!</p></div>
+                  <div class="ann-item" style="padding:12px 16px"><div class="ann-hdr"><div class="ann-av" style="background:var(--gold-light);color:#8B6914">FO</div><span class="ann-name">Fatima Ouedraogo</span><span class="ann-time">3 days ago</span></div><p class="ann-text">Live session on Databases: Saturday 10 AM EAT. Link shared on Discord.</p></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><h3>⏰ Upcoming Deadlines</h3></div>
+                <div class="card-body" style="padding:0">
+                  <div class="dl-item" style="padding:10px 16px"><div class="dl-icon"><i class="ti ti-code" aria-hidden="true"></i></div><div><div class="dl-title">Python Functions Assignment</div><div class="dl-due">Python Fundamentals · Due tomorrow</div></div><div class="dl-days dd-urgent" aria-label="1 day remaining">1 day</div></div>
+                  <div class="dl-item" style="padding:10px 16px"><div class="dl-icon" style="background:var(--gold-light);color:#8B6914"><i class="ti ti-world" aria-hidden="true"></i></div><div><div class="dl-title">Responsive Landing Page</div><div class="dl-due">Web Dev Fundamentals · Due in 5 days</div></div><div class="dl-days dd-soon" aria-label="5 days remaining">5 days</div></div>
+                  <div class="dl-item" style="padding:10px 16px"><div class="dl-icon" style="background:var(--primary-pale);color:var(--primary)"><i class="ti ti-file-text" aria-hidden="true"></i></div><div><div class="dl-title">Module 4 Knowledge Quiz</div><div class="dl-due">Python Fundamentals · Due in 8 days</div></div><div class="dl-days dd-ok" aria-label="8 days remaining">8 days</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             COURSES VIEW
+             ============================================================ -->
+        <section class="view" id="view-courses" aria-label="My Courses">
+          <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div><h2>My Courses</h2><p>Track your learning journey across all enrolled programs</p></div>
+            <button class="btn btn-accent btn-sm" id="enroll-btn" aria-label="Browse available courses"><i class="ti ti-plus" aria-hidden="true"></i> Enroll in Course</button>
+          </div>
+          <div class="courses-filter" role="group" aria-label="Filter courses">
+            <button class="filter-btn active" data-filter="all">All Courses (6)</button>
+            <button class="filter-btn" data-filter="inprogress">In Progress (2)</button>
+            <button class="filter-btn" data-filter="completed">Completed (2)</button>
+            <button class="filter-btn" data-filter="available">Available (2)</button>
+          </div>
+          <div class="courses-grid" id="courses-grid" role="list" aria-label="Course catalog">
+            <article class="course-card" role="listitem" data-status="inprogress" data-view="lesson" tabindex="0" aria-label="Python Programming Fundamentals, 47% complete">
+              <div class="cc-thumb" style="background:var(--primary)" aria-hidden="true">🐍</div>
+              <div class="cc-body"><div class="cc-tag">Software Engineering</div><div class="cc-title">Python Programming Fundamentals</div><div class="cc-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> 24 hrs</span><span><i class="ti ti-layout-list" aria-hidden="true"></i> 8 modules</span><span><i class="ti ti-users" aria-hidden="true"></i> 312</span></div><div class="progress-wrap mb-16"><div class="progress-label"><span>Progress</span><span>47%</span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:47%" role="progressbar" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100"></div></div></div><div class="cc-footer"><span class="badge badge-primary">In Progress</span><span style="font-size:11px;color:var(--text-muted)">Module 4/8</span></div></div>
+            </article>
+            <article class="course-card" role="listitem" data-status="inprogress" data-view="lesson" tabindex="0" aria-label="Web Development Fundamentals, 60% complete">
+              <div class="cc-thumb" style="background:var(--accent)" aria-hidden="true">🌐</div>
+              <div class="cc-body"><div class="cc-tag">Software Engineering</div><div class="cc-title">Web Development Fundamentals</div><div class="cc-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> 30 hrs</span><span><i class="ti ti-layout-list" aria-hidden="true"></i> 10 modules</span><span><i class="ti ti-users" aria-hidden="true"></i> 287</span></div><div class="progress-wrap mb-16"><div class="progress-label"><span>Progress</span><span>60%</span></div><div class="progress-track"><div class="progress-fill pf-orange" style="width:60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div></div></div><div class="cc-footer"><span class="badge badge-primary">In Progress</span><span style="font-size:11px;color:var(--text-muted)">Module 6/10</span></div></div>
+            </article>
+            <article class="course-card" role="listitem" data-status="completed" tabindex="0" aria-label="Databases and SQL, completed">
+              <div class="cc-thumb" style="background:var(--gold)" aria-hidden="true">🗄️</div>
+              <div class="cc-body"><div class="cc-tag">Software Engineering</div><div class="cc-title">Databases &amp; SQL Fundamentals</div><div class="cc-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> 18 hrs</span><span><i class="ti ti-layout-list" aria-hidden="true"></i> 6 modules</span><span><i class="ti ti-users" aria-hidden="true"></i> 245</span></div><div class="progress-wrap mb-16"><div class="progress-label"><span>Progress</span><span>100%</span></div><div class="progress-track"><div class="progress-fill pf-gold" style="width:100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div></div><div class="cc-footer"><span class="badge badge-gold">✓ Completed</span><span style="font-size:11px;color:var(--text-muted)">6/6 modules</span></div></div>
+            </article>
+            <article class="course-card" role="listitem" data-status="available" tabindex="0" aria-label="Intro to AI and Machine Learning, not started">
+              <div class="cc-thumb" style="background:#5B21B6" aria-hidden="true">🤖</div>
+              <div class="cc-body"><div class="cc-tag">Data Science</div><div class="cc-title">Intro to AI &amp; Machine Learning</div><div class="cc-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> 36 hrs</span><span><i class="ti ti-layout-list" aria-hidden="true"></i> 12 modules</span><span><i class="ti ti-users" aria-hidden="true"></i> 198</span></div><div class="progress-wrap mb-16"><div class="progress-label"><span>Not enrolled</span><span></span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:0%"></div></div></div><div class="cc-footer"><span class="badge badge-neutral">Not Started</span><button class="btn btn-accent btn-sm" aria-label="Enroll in AI and Machine Learning">Enroll →</button></div></div>
+            </article>
+            <article class="course-card" role="listitem" data-status="available" tabindex="0" aria-label="Data Analysis with Python, available to enroll">
+              <div class="cc-thumb" style="background:#0F766E" aria-hidden="true">📊</div>
+              <div class="cc-body"><div class="cc-tag">Data Science</div><div class="cc-title">Data Analysis with Python &amp; Pandas</div><div class="cc-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> 28 hrs</span><span><i class="ti ti-layout-list" aria-hidden="true"></i> 9 modules</span><span><i class="ti ti-users" aria-hidden="true"></i> 156</span></div><div class="progress-wrap mb-16"><div class="progress-label"><span>Available to enroll</span><span></span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:0%"></div></div></div><div class="cc-footer"><span class="badge badge-neutral">Available</span><button class="btn btn-accent btn-sm" aria-label="Enroll in Data Analysis">Enroll →</button></div></div>
+            </article>
+            <article class="course-card" role="listitem" data-status="completed" tabindex="0" aria-label="Cybersecurity Essentials, completed">
+              <div class="cc-thumb" style="background:#1E3A5F" aria-hidden="true">🔐</div>
+              <div class="cc-body"><div class="cc-tag">Software Engineering</div><div class="cc-title">Cybersecurity Essentials</div><div class="cc-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> 20 hrs</span><span><i class="ti ti-layout-list" aria-hidden="true"></i> 7 modules</span><span><i class="ti ti-users" aria-hidden="true"></i> 134</span></div><div class="progress-wrap mb-16"><div class="progress-label"><span>Progress</span><span>100%</span></div><div class="progress-track"><div class="progress-fill pf-blue" style="width:100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div></div><div class="cc-footer"><span class="badge badge-gold">✓ Completed</span><span style="font-size:11px;color:var(--text-muted)">7/7 modules</span></div></div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             LESSON VIEW
+             ============================================================ -->
+        <section class="view" id="view-lesson" aria-label="Lesson: Functions and Scope">
+          <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div><h2>Functions &amp; Scope in Python</h2><p>Python Programming Fundamentals · Module 4 of 8</p></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-outline btn-sm" id="mark-complete-btn"><i class="ti ti-circle-check" aria-hidden="true"></i> Mark Complete</button>
+              <button class="btn btn-primary btn-sm" id="next-lesson-btn"><span class="btn-text">Next Lesson →</span><span class="btn-spinner"></span></button>
+            </div>
+          </div>
+          <div class="lesson-layout">
+            <div>
+              <div class="video-box" id="video-box" role="button" tabindex="0" aria-label="Play: Functions and Scope in Python, 42 minutes 15 seconds">
+                <div class="play-btn-wrap">
+                  <button class="play-btn" aria-hidden="true"><i class="ti ti-player-play"></i></button>
+                  <div class="video-ttl">Functions &amp; Scope in Python — 42:15</div>
+                </div>
+              </div>
+              <nav class="lesson-tabs" aria-label="Lesson content tabs" role="tablist">
+                <button class="ltab active" role="tab" aria-selected="true" aria-controls="lt-notes" data-tab="notes">📝 Notes</button>
+                <button class="ltab" role="tab" aria-selected="false" aria-controls="lt-quiz" data-tab="quiz">❓ Quiz</button>
+                <button class="ltab" role="tab" aria-selected="false" aria-controls="lt-resources" data-tab="resources">📎 Resources</button>
+                <button class="ltab" role="tab" aria-selected="false" aria-controls="lt-discuss" data-tab="discuss">💬 Discussion</button>
+              </nav>
+
+              <div id="lt-notes" role="tabpanel" aria-labelledby="tab-notes" class="lesson-prose">
+                <h3>Understanding Functions in Python</h3>
+                <p>A function is a reusable block of code that performs a specific task. Functions help us follow the DRY principle — <em>Don't Repeat Yourself</em> — making programs modular and easier to maintain.</p>
+                <pre>def greet(name):
+    """Greet a person by name in Swahili."""
+    message = f"Habari, {name}! Karibu sana."
+    return message
+
+print(greet("Amara"))
+# Output: Habari, Amara! Karibu sana.</pre>
+                <h3>Function Parameters &amp; Arguments</h3>
+                <p>Functions accept parameters allowing them to work with different data. Python supports positional, keyword, default, and variable-length arguments.</p>
+                <pre>def calculate_grade(score, total=100, student="Student"):
+    percentage = (score / total) * 100
+    grade = "Distinction" if percentage >= 70 else "Pass"
+    return f"{student}: {percentage:.1f}% — {grade}"
+
+print(calculate_grade(85, student="Amara"))
+# Amara: 85.0% — Distinction</pre>
+                <h3>Scope: Local vs Global Variables</h3>
+                <p>Scope refers to where a variable can be accessed. Variables inside a function are <em>local</em>; variables outside are <em>global</em>.</p>
+                <div class="african-insight" role="note">💡 <strong>African Tech Insight:</strong> Scope in programming mirrors many African governance structures — decisions at the local (village) level don't automatically affect the global (national) level. Understanding boundaries prevents unintended side-effects in both governance and code.</div>
+              </div>
+
+              <div id="lt-quiz" role="tabpanel" aria-labelledby="tab-quiz" style="display:none">
+                <div class="quiz-wrap">
+                  <p style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-light);font-weight:700;margin-bottom:8px" aria-live="polite" id="quiz-progress-label">Knowledge Check · Question 1 of 4</p>
+                  <div class="quiz-q" id="quiz-question" role="heading" aria-level="3">What keyword is used to define a function in Python?</div>
+                  <ul class="quiz-opts" role="radiogroup" aria-labelledby="quiz-question">
+                    <li class="quiz-opt" role="radio" aria-checked="false" tabindex="0" data-correct="false"><div class="opt-letter" aria-hidden="true">A</div>function</li>
+                    <li class="quiz-opt" role="radio" aria-checked="false" tabindex="0" data-correct="true"><div class="opt-letter" aria-hidden="true">B</div>def</li>
+                    <li class="quiz-opt" role="radio" aria-checked="false" tabindex="0" data-correct="false"><div class="opt-letter" aria-hidden="true">C</div>define</li>
+                    <li class="quiz-opt" role="radio" aria-checked="false" tabindex="0" data-correct="false"><div class="opt-letter" aria-hidden="true">D</div>func</li>
+                  </ul>
+                  <div id="quiz-feedback" role="alert" aria-live="polite" style="margin-top:14px;padding:12px;border-radius:8px;display:none;font-size:13px"></div>
+                  <div class="quiz-nav">
+                    <div style="font-size:12px;color:var(--text-muted)" id="quiz-score-display"></div>
+                    <button class="btn btn-primary btn-sm hidden" id="next-question-btn">Next Question →</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="lt-resources" role="tabpanel" aria-labelledby="tab-resources" style="display:none">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer" tabindex="0" role="button" aria-label="Download Python Functions lecture slides PDF, 2.4 megabytes" class="resource-item">
+                    <i class="ti ti-file-type-pdf" style="font-size:22px;color:#DC2626" aria-hidden="true"></i>
+                    <div><div style="font-size:13px;font-weight:600">Python Functions — Lecture Slides</div><div style="font-size:11px;color:var(--text-muted)">PDF · 2.4 MB</div></div>
+                    <i class="ti ti-download" style="margin-left:auto;color:var(--text-light);font-size:17px" aria-hidden="true"></i>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer" tabindex="0" role="button" aria-label="Download Module 4 practice exercises Python file, 8.1 kilobytes" class="resource-item">
+                    <i class="ti ti-brand-python" style="font-size:22px;color:#3B82F6" aria-hidden="true"></i>
+                    <div><div style="font-size:13px;font-weight:600">Module 4 Practice Exercises</div><div style="font-size:11px;color:var(--text-muted)">Python · 8.1 KB</div></div>
+                    <i class="ti ti-download" style="margin-left:auto;color:var(--text-light);font-size:17px" aria-hidden="true"></i>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer" tabindex="0" role="button" aria-label="Download Functions cheat sheet PDF, 820 kilobytes" class="resource-item">
+                    <i class="ti ti-file-text" style="font-size:22px;color:var(--accent)" aria-hidden="true"></i>
+                    <div><div style="font-size:13px;font-weight:600">Functions Cheat Sheet</div><div style="font-size:11px;color:var(--text-muted)">PDF · 820 KB</div></div>
+                    <i class="ti ti-download" style="margin-left:auto;color:var(--text-light);font-size:17px" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div id="lt-discuss" role="tabpanel" aria-labelledby="tab-discuss" style="display:none">
+                <div class="forum-compose" style="margin-bottom:16px">
+                  <textarea class="form-input" id="discuss-input" rows="3" placeholder="Ask a question or share your thoughts about this lesson…" aria-label="Discussion comment input" maxlength="500"></textarea>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                    <span style="font-size:11px;color:var(--text-muted)" id="discuss-char-count" aria-live="polite">0/500</span>
+                    <button class="btn btn-primary btn-sm" id="post-comment-btn"><span class="btn-text">Post Comment</span><span class="btn-spinner"></span></button>
+                  </div>
+                </div>
+                <div id="discussion-list">
+                  <div style="padding:13px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px">
+                    <div style="display:flex;gap:9px;align-items:center;margin-bottom:7px">
+                      <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white" aria-hidden="true">KA</div>
+                      <strong style="font-size:13px">Kofi Asante</strong>
+                      <time style="font-size:10px;color:var(--text-light);margin-left:auto" datetime="2026-05-08T10:00">2 hours ago</time>
+                    </div>
+                    <p style="font-size:13px;color:var(--text-muted)">Does the scope of a variable inside a nested function behave like a closure in JavaScript?</p>
+                    <button class="link-btn" style="font-size:11px;margin-top:7px" aria-label="Reply to Kofi Asante">↩ Reply</button>
+                  </div>
+                  <div style="padding:13px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px">
+                    <div style="display:flex;gap:9px;align-items:center;margin-bottom:7px">
+                      <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white" aria-hidden="true">FO</div>
+                      <strong style="font-size:13px">Fatima Ouedraogo</strong>
+                      <time style="font-size:10px;color:var(--text-light);margin-left:auto" datetime="2026-05-07T18:00">Yesterday</time>
+                    </div>
+                    <p style="font-size:13px;color:var(--text-muted)">The <code style="background:#F3F4F6;padding:1px 5px;border-radius:3px">nonlocal</code> keyword in Python is great for modifying enclosing scope variables — it's similar to closures but more explicit!</p>
+                    <button class="link-btn" style="font-size:11px;margin-top:7px" aria-label="Reply to Fatima Ouedraogo">↩ Reply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="lsbar" role="navigation" aria-label="Course module navigation">
+                <div class="lsbar-title">Course Modules</div>
+                <div class="lmod-item" tabindex="0" aria-label="Module 1: Intro and Setup, completed"><i class="ti ti-circle-check" style="color:var(--primary)" aria-hidden="true"></i>Intro &amp; Environment Setup</div>
+                <div class="lmod-item" tabindex="0" aria-label="Module 2: Variables, completed"><i class="ti ti-circle-check" style="color:var(--primary)" aria-hidden="true"></i>Variables &amp; Data Types</div>
+                <div class="lmod-item" tabindex="0" aria-label="Module 3: Control Flow, completed"><i class="ti ti-circle-check" style="color:var(--primary)" aria-hidden="true"></i>Control Flow</div>
+                <div class="lmod-item current" tabindex="0" aria-current="true" aria-label="Module 4: Functions and Scope, current"><i class="ti ti-player-play" aria-hidden="true"></i>Functions &amp; Scope</div>
+                <div class="lmod-item" tabindex="0" aria-label="Module 5: Data Structures, locked" aria-disabled="true" style="color:var(--text-light)"><i class="ti ti-lock" aria-hidden="true"></i>Data Structures</div>
+                <div class="lmod-item" style="color:var(--text-light)"><i class="ti ti-lock" aria-hidden="true"></i>OOP Fundamentals</div>
+                <div class="lmod-item" style="color:var(--text-light)"><i class="ti ti-lock" aria-hidden="true"></i>File I/O</div>
+                <div class="lmod-item" style="color:var(--text-light)"><i class="ti ti-lock" aria-hidden="true"></i>Final Project</div>
+              </div>
+              <div class="card" style="margin-top:14px;padding:14px">
+                <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px">📊 Module Progress</div>
+                <div class="progress-wrap"><div class="progress-label"><span>Lessons done</span><span>3/4</span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:75%"></div></div></div>
+                <div style="margin-top:9px;font-size:11px;color:var(--text-muted)">Estimated remaining: <strong style="color:var(--text)">~22 min</strong></div>
+              </div>
+              <div class="xp-reward">
+                <div style="font-size:12px;font-weight:700;color:#8B6914;margin-bottom:5px">🏆 XP Reward</div>
+                <div style="font-size:11px;color:#8B6914">Complete this module to earn <strong>+120 XP</strong> and unlock the next lesson!</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             ASSIGNMENTS VIEW
+             ============================================================ -->
+        <section class="view" id="view-assignments" aria-label="Assignments">
+          <div class="page-header"><h2>Assignments</h2><p id="assign-summary">3 pending · 2 submitted · 1 graded</p></div>
+          <div class="assign-tabs" role="tablist" aria-label="Assignment categories">
+            <button class="atab active" role="tab" aria-selected="true" data-atab="pending">Pending (3)</button>
+            <button class="atab" role="tab" aria-selected="false" data-atab="submitted">Submitted (2)</button>
+            <button class="atab" role="tab" aria-selected="false" data-atab="graded">Graded (1)</button>
+          </div>
+          <div id="at-pending" role="tabpanel">
+            <div class="assign-card"><div class="at-icon" style="background:#EDE9FE"><i class="ti ti-code" style="color:#6D28D9;font-size:20px" aria-hidden="true"></i></div><div class="assign-info"><div class="a-title">Module 4: Python Functions Practice</div><div class="a-course">Python Programming Fundamentals</div><div class="a-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> Due tomorrow, 11:59 PM</span><span><i class="ti ti-star" aria-hidden="true"></i> 100 pts</span><span><i class="ti ti-list" aria-hidden="true"></i> 5 tasks</span></div></div><div class="assign-act"><button class="btn btn-outline btn-sm" aria-label="Start Python Functions assignment">Start</button></div></div>
+            <div class="assign-card"><div class="at-icon" style="background:#FEF3C7"><i class="ti ti-world" style="color:#D97706;font-size:20px" aria-hidden="true"></i></div><div class="assign-info"><div class="a-title">Build a Responsive Portfolio Page</div><div class="a-course">Web Development Fundamentals</div><div class="a-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> Due in 5 days</span><span><i class="ti ti-star" aria-hidden="true"></i> 150 pts</span><span><i class="ti ti-link" aria-hidden="true"></i> GitHub link</span></div></div><div class="assign-act"><button class="btn btn-outline btn-sm" aria-label="Start portfolio assignment">Start</button></div></div>
+            <div class="assign-card"><div class="at-icon" style="background:var(--primary-pale)"><i class="ti ti-chart-bar" style="color:var(--primary);font-size:20px" aria-hidden="true"></i></div><div class="assign-info"><div class="a-title">Module 4 Knowledge Quiz</div><div class="a-course">Python Programming Fundamentals</div><div class="a-meta"><span><i class="ti ti-clock" aria-hidden="true"></i> Due in 8 days</span><span><i class="ti ti-star" aria-hidden="true"></i> 50 pts</span><span><i class="ti ti-question-mark" aria-hidden="true"></i> 20 questions</span></div></div><div class="assign-act"><button class="btn btn-outline btn-sm" data-view="lesson" aria-label="Take knowledge quiz">Take Quiz</button></div></div>
+          </div>
+          <div id="at-submitted" role="tabpanel" style="display:none">
+            <div class="assign-card"><div class="at-icon" style="background:var(--primary-pale)"><i class="ti ti-database" style="color:var(--primary);font-size:20px" aria-hidden="true"></i></div><div class="assign-info"><div class="a-title">SQL Joins &amp; Aggregations</div><div class="a-course">Databases &amp; SQL Fundamentals</div><div class="a-meta"><span><i class="ti ti-check" style="color:var(--primary)" aria-hidden="true"></i> Submitted 2 days ago</span><span><i class="ti ti-clock" aria-hidden="true"></i> Awaiting review</span></div></div><div class="assign-act"><button class="btn btn-ghost btn-sm" disabled aria-label="Submitted">Submitted ✓</button></div></div>
+            <div class="assign-card"><div class="at-icon" style="background:#FEF0E6"><i class="ti ti-layout" style="color:var(--accent);font-size:20px" aria-hidden="true"></i></div><div class="assign-info"><div class="a-title">CSS Flexbox Layout Challenge</div><div class="a-course">Web Development Fundamentals</div><div class="a-meta"><span><i class="ti ti-check" style="color:var(--primary)" aria-hidden="true"></i> Submitted 5 days ago</span><span><i class="ti ti-clock" aria-hidden="true"></i> Awaiting review</span></div></div><div class="assign-act"><button class="btn btn-ghost btn-sm" disabled aria-label="Submitted">Submitted ✓</button></div></div>
+          </div>
+          <div id="at-graded" role="tabpanel" style="display:none">
+            <div class="assign-card"><div class="at-icon" style="background:var(--gold-light)"><i class="ti ti-trophy" style="color:#8B6914;font-size:20px" aria-hidden="true"></i></div><div class="assign-info"><div class="a-title">Module 3: Control Flow Challenge</div><div class="a-course">Python Programming Fundamentals</div><div class="a-meta"><span><i class="ti ti-star-filled" style="color:var(--gold)" aria-hidden="true"></i> Score: 92/100 · Distinction</span><span><i class="ti ti-message" aria-hidden="true"></i> Feedback available</span></div></div><div class="assign-act"><div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--primary)" aria-label="Score: 92 percent">92%</div><div style="font-size:10px;color:var(--text-muted)">Distinction</div></div></div></div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             LEADERBOARD VIEW
+             ============================================================ -->
+        <section class="view" id="view-leaderboard" aria-label="Cohort Leaderboard">
+          <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <div><h2>Cohort Leaderboard</h2><p>Cohort 8 — May 2026 · 48 learners competing</p></div>
+            <div style="display:flex;gap:8px">
+              <select class="form-select" style="width:auto;padding:7px 12px" aria-label="Filter leaderboard"><option>This Month</option><option>All Time</option><option>This Week</option></select>
+              <select class="form-select" style="width:auto;padding:7px 12px" aria-label="Filter by track"><option>All Tracks</option><option>Software Eng</option><option>Data Science</option></select>
+            </div>
+          </div>
+          <div class="lb-podium" role="region" aria-label="Top 3 leaderboard podium">
+            <div class="lb-pod-item"><div class="lb-pod-av" style="background:#9CA3AF" aria-label="Rank 2: Fatima Ouedraogo">FO</div><div class="lb-pod-name">Fatima Ouedraogo</div><div class="lb-pod-score">5,940 XP</div><div class="lb-pod-stand" style="background:#9CA3AF;height:68px" aria-hidden="true">2</div></div>
+            <div class="lb-pod-item"><div class="lb-pod-av" style="background:var(--gold);width:66px;height:66px;font-size:22px" aria-label="Rank 1: Zainab Nkosi, winner"><span class="lb-crown" aria-hidden="true">👑</span>ZN</div><div class="lb-pod-name" style="font-size:14px;font-weight:700">Zainab Nkosi</div><div class="lb-pod-score" style="font-weight:600;color:var(--primary)">6,840 XP</div><div class="lb-pod-stand" style="background:var(--gold);height:90px;color:white" aria-hidden="true">1</div></div>
+            <div class="lb-pod-item"><div class="lb-pod-av" style="background:#C27B4B" aria-label="Rank 3: Kwame Asante">KA</div><div class="lb-pod-name">Kwame Asante</div><div class="lb-pod-score">5,720 XP</div><div class="lb-pod-stand" style="background:#C27B4B;height:58px" aria-hidden="true">3</div></div>
+          </div>
+          <div class="lb-tbl-wrap">
+            <table class="lb-tbl" aria-label="Full leaderboard rankings">
+              <thead><tr><th scope="col">#</th><th scope="col">Learner</th><th scope="col">Country</th><th scope="col">XP Points</th><th scope="col">Streak</th><th scope="col">Courses</th><th scope="col">Level</th></tr></thead>
+              <tbody>
+                <tr><td><div class="lb-rank r1">1</div></td><td><div class="lb-stu"><div class="lb-av" style="background:var(--gold)" aria-hidden="true">ZN</div><div><div style="font-weight:600">Zainab Nkosi</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇿🇦 South Africa</td><td><span class="lb-score">6,840</span> XP</td><td>14 days 🔥</td><td>4/4</td><td><span class="badge badge-gold">⭐ Expert</span></td></tr>
+                <tr><td><div class="lb-rank r2">2</div></td><td><div class="lb-stu"><div class="lb-av" style="background:#9CA3AF" aria-hidden="true">FO</div><div><div style="font-weight:600">Fatima Ouedraogo</div><div style="font-size:11px;color:var(--text-muted)">Data Science</div></div></div></td><td>🇧🇫 Burkina Faso</td><td><span class="lb-score">5,940</span> XP</td><td>11 days 🔥</td><td>3/4</td><td><span class="badge badge-primary">Advanced</span></td></tr>
+                <tr><td><div class="lb-rank r3">3</div></td><td><div class="lb-stu"><div class="lb-av" style="background:#C27B4B" aria-hidden="true">KA</div><div><div style="font-weight:600">Kwame Asante</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇬🇭 Ghana</td><td><span class="lb-score">5,720</span> XP</td><td>9 days 🔥</td><td>3/4</td><td><span class="badge badge-primary">Advanced</span></td></tr>
+                <tr><td><div class="lb-rank">4</div></td><td><div class="lb-stu"><div class="lb-av" style="background:#7C3AED" aria-hidden="true">CM</div><div><div style="font-weight:600">Chiamaka Mbeki</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇳🇬 Nigeria</td><td><span class="lb-score">5,480</span> XP</td><td>8 days 🔥</td><td>3/4</td><td><span class="badge badge-primary">Advanced</span></td></tr>
+                <tr><td><div class="lb-rank">5</div></td><td><div class="lb-stu"><div class="lb-av" style="background:#0F766E" aria-hidden="true">IO</div><div><div style="font-weight:600">Ifeanyi Okonkwo</div><div style="font-size:11px;color:var(--text-muted)">Data Science</div></div></div></td><td>🇳🇬 Nigeria</td><td><span class="lb-score">5,210</span> XP</td><td>7 days 🔥</td><td>2/4</td><td><span class="badge badge-primary">Advanced</span></td></tr>
+                <tr><td><div class="lb-rank">6</div></td><td><div class="lb-stu"><div class="lb-av" style="background:#B45309" aria-hidden="true">MS</div><div><div style="font-weight:600">Malia Sesay</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇸🇱 Sierra Leone</td><td><span class="lb-score">4,990</span> XP</td><td>5 days 🔥</td><td>2/4</td><td><span class="badge badge-primary">Advanced</span></td></tr>
+                <tr class="you-row" aria-label="Your ranking: 12th place"><td><div class="lb-rank">12</div></td><td><div class="lb-stu"><div class="lb-av" id="your-lb-av" style="background:var(--accent)" aria-hidden="true">AD</div><div><div style="font-weight:600" id="your-lb-name">Amara Diallo <span class="badge badge-gold" style="font-size:9px;margin-left:4px">You</span></div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td id="your-country">🇸🇳 Senegal</td><td><span class="lb-score">4,820</span> XP</td><td>7 days 🔥</td><td>2/4</td><td><span class="badge badge-accent">Intermediate</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             PROFILE VIEW
+             ============================================================ -->
+        <section class="view" id="view-profile" aria-label="My Profile">
+          <div class="profile-hdr" role="banner" aria-label="Profile header">
+            <div class="profile-top">
+              <div class="profile-avatar" id="prof-av" aria-hidden="true">AD</div>
+              <div class="profile-info"><h2 id="prof-name">Amara Diallo</h2><p id="prof-meta">Software Engineering · Cohort 8 · Dakar, Senegal 🇸🇳</p></div>
+            </div>
+            <div class="profile-badges" role="list" aria-label="Achievements">
+              <span class="pb" style="background:rgba(212,168,67,.22);color:var(--gold)" role="listitem">⭐ 7-Day Streak</span>
+              <span class="pb" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)" role="listitem">🏆 Rank #12</span>
+              <span class="pb" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)" role="listitem">⚡ 4,820 XP</span>
+              <span class="pb" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)" role="listitem">📚 2 Completed</span>
+            </div>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-sec">
+              <h3>Personal Information</h3>
+              <div class="pf"><label>Full Name</label><div class="fv" id="pf-name">Amara Diallo</div></div>
+              <div class="pf"><label>Email</label><div class="fv" id="pf-email">amara.diallo@student.ubuntu.ac</div></div>
+              <div class="pf"><label>Country</label><div class="fv" id="pf-country">🇸🇳 Senegal, West Africa</div></div>
+              <div class="pf"><label>Program</label><div class="fv" id="pf-prog">Software Engineering · 12-Month</div></div>
+              <div class="pf"><label>Cohort</label><div class="fv">Cohort 8 · May 2026 Intake</div></div>
+              <div class="pf"><label>Member Since</label><div class="fv">January 2026</div></div>
+              <button class="btn btn-outline btn-sm" id="edit-profile-btn" style="margin-top:8px" aria-label="Edit profile information">Edit Profile</button>
+            </div>
+            <div class="profile-sec">
+              <h3>Skills Progress</h3>
+              <div class="skill-bar"><div class="skb-lbl"><span>Python Programming</span><span>68%</span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:68%" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="Python Programming 68%"></div></div></div>
+              <div class="skill-bar"><div class="skb-lbl"><span>Web Development</span><span>72%</span></div><div class="progress-track"><div class="progress-fill pf-orange" style="width:72%" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" aria-label="Web Development 72%"></div></div></div>
+              <div class="skill-bar"><div class="skb-lbl"><span>Database &amp; SQL</span><span>95%</span></div><div class="progress-track"><div class="progress-fill pf-gold" style="width:95%" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" aria-label="Database and SQL 95%"></div></div></div>
+              <div class="skill-bar"><div class="skb-lbl"><span>Cybersecurity</span><span>88%</span></div><div class="progress-track"><div class="progress-fill pf-blue" style="width:88%" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" aria-label="Cybersecurity 88%"></div></div></div>
+              <div class="skill-bar"><div class="skb-lbl"><span>Problem Solving</span><span>74%</span></div><div class="progress-track"><div class="progress-fill pf-purple" style="width:74%" role="progressbar" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100" aria-label="Problem Solving 74%"></div></div></div>
+            </div>
+            <div class="profile-sec" style="grid-column:1/-1">
+              <h3>Achievements &amp; Badges</h3>
+              <div class="ach-grid" role="list">
+                <div class="ach-item" role="listitem" tabindex="0"><div class="ach-icon">🔥</div><span class="ach-name">7-Day Streak</span><span class="ach-date">This week</span></div>
+                <div class="ach-item" role="listitem" tabindex="0"><div class="ach-icon">🏆</div><span class="ach-name">Top 15%</span><span class="ach-date">This month</span></div>
+                <div class="ach-item" role="listitem" tabindex="0"><div class="ach-icon">✅</div><span class="ach-name">First Course Done</span><span class="ach-date">Mar 2026</span></div>
+                <div class="ach-item" role="listitem" tabindex="0"><div class="ach-icon">⚡</div><span class="ach-name">4,000 XP Club</span><span class="ach-date">Apr 2026</span></div>
+                <div class="ach-item" role="listitem" tabindex="0"><div class="ach-icon">💻</div><span class="ach-name">First Project</span><span class="ach-date">Feb 2026</span></div>
+                <div class="ach-item" role="listitem" tabindex="0"><div class="ach-icon">🌍</div><span class="ach-name">Africa Rising</span><span class="ach-date">Jan 2026</span></div>
+                <div class="ach-item locked" role="listitem" aria-label="Locked achievement: 30-Day Streak"><div class="ach-icon">🚀</div><span class="ach-name">30-Day Streak</span><span class="ach-date">Locked</span></div>
+                <div class="ach-item locked" role="listitem" aria-label="Locked achievement: Leaderboard number 1"><div class="ach-icon">👑</div><span class="ach-name">Leaderboard #1</span><span class="ach-date">Locked</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             CALENDAR VIEW
+             ============================================================ -->
+        <section class="view" id="view-calendar" aria-label="Schedule and Calendar">
+          <div class="page-header"><h2>Schedule</h2><p>Track sessions, deadlines and learning activities</p></div>
+          <div class="cal-layout">
+            <div>
+              <div class="cal-nav-row">
+                <div class="cal-nav-btns">
+                  <button class="btn btn-icon" id="cal-prev" aria-label="Previous month"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+                  <button class="btn btn-icon" id="cal-today" aria-label="Go to today">Today</button>
+                </div>
+                <h3 id="cal-month-label">May 2026</h3>
+                <button class="btn btn-icon" id="cal-next" aria-label="Next month"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+              </div>
+              <div class="cal-grid-wrap" role="grid" aria-label="Calendar">
+                <div class="cal-dow" role="row">
+                  <div class="cal-dow-cell" role="columnheader" abbr="Sunday">Sun</div>
+                  <div class="cal-dow-cell" role="columnheader" abbr="Monday">Mon</div>
+                  <div class="cal-dow-cell" role="columnheader" abbr="Tuesday">Tue</div>
+                  <div class="cal-dow-cell" role="columnheader" abbr="Wednesday">Wed</div>
+                  <div class="cal-dow-cell" role="columnheader" abbr="Thursday">Thu</div>
+                  <div class="cal-dow-cell" role="columnheader" abbr="Friday">Fri</div>
+                  <div class="cal-dow-cell" role="columnheader" abbr="Saturday">Sat</div>
+                </div>
+                <div class="cal-days" id="cal-days" role="rowgroup"></div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-header"><h3>📅 Upcoming Events</h3></div>
+                <div style="padding:0">
+                  <div class="ev-item"><div class="ev-dot" style="background:var(--danger)"></div><div class="ev-info"><h5>Python Functions — Due</h5><p>Assignment deadline · 11:59 PM EAT</p></div><div class="ev-time">Tomorrow</div></div>
+                  <div class="ev-item"><div class="ev-dot" style="background:var(--accent)"></div><div class="ev-info"><h5>Live Session: Databases</h5><p>Dr. Kwame Osei · Zoom</p></div><div class="ev-time">Sat 10AM</div></div>
+                  <div class="ev-item"><div class="ev-dot" style="background:var(--primary)"></div><div class="ev-info"><h5>Module 4 Quiz Opens</h5><p>Python Fundamentals</p></div><div class="ev-time">May 13</div></div>
+                  <div class="ev-item"><div class="ev-dot" style="background:var(--gold)"></div><div class="ev-info"><h5>Cohort 8 Hackathon</h5><p>24-hour group challenge</p></div><div class="ev-time">May 20</div></div>
+                  <div class="ev-item"><div class="ev-dot" style="background:#5B21B6"></div><div class="ev-info"><h5>AI Webinar: Africa &amp; ML</h5><p>Guest speaker · Kofi Boateng, Google</p></div><div class="ev-time">May 22</div></div>
+                </div>
+              </div>
+              <div class="card" style="margin-top:14px;padding:14px">
+                <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px">Legend</div>
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)"><div style="width:10px;height:10px;border-radius:2px;background:var(--primary-pale)"></div>Lesson / Module</div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)"><div style="width:10px;height:10px;border-radius:2px;background:#FEF0E6"></div>Live Session</div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)"><div style="width:10px;height:10px;border-radius:2px;background:var(--danger-pale)"></div>Assignment Deadline</div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)"><div style="width:10px;height:10px;border-radius:2px;background:var(--gold-light)"></div>Community Event</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             GRADES VIEW
+             ============================================================ -->
+        <section class="view" id="view-grades" aria-label="Grades and Progress">
+          <div class="page-header"><h2>Grades</h2><p>Your academic performance across all courses</p></div>
+          <div class="grades-overview">
+            <div class="grade-big-card">
+              <div class="gpa-ring" role="img" aria-label="GPA 3.7 out of 4.0">
+                <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="var(--border)" stroke-width="8"/><circle cx="42" cy="42" r="36" fill="none" stroke="var(--primary)" stroke-width="8" stroke-dasharray="226.2" stroke-dashoffset="57" stroke-linecap="round"/></svg>
+                <div class="gpa-num">3.7</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">Cumulative GPA</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Out of 4.0</div>
+            </div>
+            <div class="grade-big-card">
+              <div class="gpa-ring" role="img" aria-label="Assignments score 88 percent">
+                <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="var(--border)" stroke-width="8"/><circle cx="42" cy="42" r="36" fill="none" stroke="var(--accent)" stroke-width="8" stroke-dasharray="226.2" stroke-dashoffset="27" stroke-linecap="round"/></svg>
+                <div class="gpa-num" style="color:var(--accent)">88%</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">Assignments Avg</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">7 of 9 graded</div>
+            </div>
+            <div class="grade-big-card">
+              <div class="gpa-ring" role="img" aria-label="Quizzes score 82 percent">
+                <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="var(--border)" stroke-width="8"/><circle cx="42" cy="42" r="36" fill="none" stroke="var(--gold)" stroke-width="8" stroke-dasharray="226.2" stroke-dashoffset="41" stroke-linecap="round"/></svg>
+                <div class="gpa-num" style="color:var(--gold)">82%</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">Quiz Average</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">5 quizzes done</div>
+            </div>
+          </div>
+          <div class="grade-tbl-wrap">
+            <table class="grade-tbl" aria-label="Detailed grades by assignment">
+              <thead><tr><th scope="col">Assignment</th><th scope="col">Course</th><th scope="col">Type</th><th scope="col">Score</th><th scope="col">Grade</th><th scope="col">Submitted</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:500">Module 3: Control Flow Challenge</td><td style="color:var(--text-muted)">Python Fundamentals</td><td><span class="badge badge-primary">Assignment</span></td><td>92/100</td><td><span class="grade-pill gp-a">A — Distinction</span></td><td>May 1</td></tr>
+                <tr><td style="font-weight:500">SQL Joins &amp; Aggregations</td><td style="color:var(--text-muted)">Databases &amp; SQL</td><td><span class="badge badge-accent">Assignment</span></td><td>87/100</td><td><span class="grade-pill gp-b">B — Merit</span></td><td>Apr 28</td></tr>
+                <tr><td style="font-weight:500">HTML/CSS Portfolio Project</td><td style="color:var(--text-muted)">Web Development</td><td><span class="badge badge-purple">Project</span></td><td>95/100</td><td><span class="grade-pill gp-a">A — Distinction</span></td><td>Apr 20</td></tr>
+                <tr><td style="font-weight:500">Module 2: Variables Quiz</td><td style="color:var(--text-muted)">Python Fundamentals</td><td><span class="badge badge-gold">Quiz</span></td><td>18/20</td><td><span class="grade-pill gp-a">A — Distinction</span></td><td>Apr 15</td></tr>
+                <tr><td style="font-weight:500">CSS Flexbox Layout Challenge</td><td style="color:var(--text-muted)">Web Development</td><td><span class="badge badge-primary">Assignment</span></td><td>—</td><td><span class="grade-pill gp-p">Pending</span></td><td>Submitted</td></tr>
+                <tr><td style="font-weight:500">Network Security Basics Quiz</td><td style="color:var(--text-muted)">Cybersecurity</td><td><span class="badge badge-gold">Quiz</span></td><td>14/20</td><td><span class="grade-pill gp-b">B — Merit</span></td><td>Mar 30</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             CERTIFICATES VIEW
+             ============================================================ -->
+        <section class="view" id="view-certificates" aria-label="Certificates and Credentials">
+          <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div><h2>Certificates</h2><p>2 earned · 2 in progress · 2 locked</p></div>
+            <button class="btn btn-ghost btn-sm" aria-label="Share all certificates"><i class="ti ti-share" aria-hidden="true"></i> Share Portfolio</button>
+          </div>
+          <div class="certs-grid">
+            <article class="cert-card" tabindex="0" aria-label="Certificate: Databases and SQL Fundamentals, earned March 2026">
+              <div class="cert-preview" style="background:linear-gradient(135deg,#E8F5EE 0%,var(--gold-light) 100%)">
+                <div class="cert-inner">
+                  <div class="cert-logo">Ubuntu Academy</div>
+                  <div style="font-size:9px;color:var(--text-muted);margin-bottom:4px">Certificate of Completion</div>
+                  <div class="cert-title-big">Databases &amp; SQL Fundamentals</div>
+                  <div class="cert-name-big" id="cert-name-1">Amara Diallo</div>
+                  <div class="cert-seal" aria-hidden="true">✓</div>
+                </div>
+              </div>
+              <div class="cert-body">
+                <div class="cert-course-name">Databases &amp; SQL Fundamentals</div>
+                <div style="font-size:11px;color:var(--text-muted)">Software Engineering Track</div>
+                <div class="cert-meta-row"><div class="cert-date">Earned: March 15, 2026</div><div style="display:flex;gap:7px"><button class="btn btn-ghost btn-sm" aria-label="Download SQL certificate"><i class="ti ti-download" aria-hidden="true"></i></button><button class="btn btn-accent btn-sm" aria-label="Share SQL certificate"><i class="ti ti-share" aria-hidden="true"></i></button></div></div>
+              </div>
+            </article>
+            <article class="cert-card" tabindex="0" aria-label="Certificate: Cybersecurity Essentials, earned April 2026">
+              <div class="cert-preview" style="background:linear-gradient(135deg,#E0E7FF 0%,#EDE9FE 100%)">
+                <div class="cert-inner">
+                  <div class="cert-logo">Ubuntu Academy</div>
+                  <div style="font-size:9px;color:var(--text-muted);margin-bottom:4px">Certificate of Completion</div>
+                  <div class="cert-title-big">Cybersecurity Essentials</div>
+                  <div class="cert-name-big" id="cert-name-2">Amara Diallo</div>
+                  <div class="cert-seal" aria-hidden="true">✓</div>
+                </div>
+              </div>
+              <div class="cert-body">
+                <div class="cert-course-name">Cybersecurity Essentials</div>
+                <div style="font-size:11px;color:var(--text-muted)">Software Engineering Track</div>
+                <div class="cert-meta-row"><div class="cert-date">Earned: April 2, 2026</div><div style="display:flex;gap:7px"><button class="btn btn-ghost btn-sm" aria-label="Download Cybersecurity certificate"><i class="ti ti-download" aria-hidden="true"></i></button><button class="btn btn-accent btn-sm" aria-label="Share Cybersecurity certificate"><i class="ti ti-share" aria-hidden="true"></i></button></div></div>
+              </div>
+            </article>
+            <article class="cert-card cert-locked" tabindex="0" aria-label="Certificate: Python Programming Fundamentals, in progress at 47%">
+              <div class="cert-preview" style="background:var(--bg)">
+                <div class="cert-inner" style="border-color:var(--border)">
+                  <div class="cert-logo" style="color:var(--text-light)">Ubuntu Academy</div>
+                  <div style="font-size:9px;color:var(--text-light);margin-bottom:4px">Certificate of Completion</div>
+                  <div class="cert-title-big" style="color:var(--text-muted)">Python Programming Fundamentals</div>
+                  <div style="font-size:10px;color:var(--text-light);margin-top:8px">47% complete</div>
+                </div>
+              </div>
+              <div class="cert-body">
+                <div class="cert-course-name">Python Programming Fundamentals</div>
+                <div class="progress-wrap" style="margin-top:8px"><div class="progress-label"><span>Progress</span><span>47%</span></div><div class="progress-track"><div class="progress-fill pf-green" style="width:47%"></div></div></div>
+              </div>
+            </article>
+            <article class="cert-card cert-locked" tabindex="0" aria-label="Certificate: Web Development Fundamentals, in progress at 60%">
+              <div class="cert-preview" style="background:var(--bg)">
+                <div class="cert-inner" style="border-color:var(--border)">
+                  <div class="cert-logo" style="color:var(--text-light)">Ubuntu Academy</div>
+                  <div style="font-size:9px;color:var(--text-light);margin-bottom:4px">Certificate of Completion</div>
+                  <div class="cert-title-big" style="color:var(--text-muted)">Web Development Fundamentals</div>
+                  <div style="font-size:10px;color:var(--text-light);margin-top:8px">60% complete</div>
+                </div>
+              </div>
+              <div class="cert-body">
+                <div class="cert-course-name">Web Development Fundamentals</div>
+                <div class="progress-wrap" style="margin-top:8px"><div class="progress-label"><span>Progress</span><span>60%</span></div><div class="progress-track"><div class="progress-fill pf-orange" style="width:60%"></div></div></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             LIVE SESSIONS VIEW
+             ============================================================ -->
+        <section class="view" id="view-live" aria-label="Live Sessions">
+          <div class="page-header"><h2>Live Sessions</h2><p>Join live classes, office hours and community events</p></div>
+          <div class="live-banner" role="alert" aria-live="polite">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="live-dot" aria-hidden="true"></div>
+              <div><h3>🔴 Live Now: Python Office Hours</h3><p>Dr. Kwame Osei is answering questions — 24 learners joined</p></div>
+            </div>
+            <button class="btn btn-sm" style="background:white;color:var(--red-earth);font-weight:700;flex-shrink:0" id="join-live-btn" aria-label="Join live Python office hours session">Join Now</button>
+          </div>
+          <div class="sess-grid">
+            <article class="sess-card" aria-label="Live session: Python Office Hours, happening now">
+              <div class="sess-hdr"><div><div class="sess-title">Python Office Hours</div><div class="sess-info">Dr. Kwame Osei • Free Q&amp;A on Functions &amp; Scope</div></div><span class="sess-status ss-live" role="status">● LIVE</span></div>
+              <div class="sess-meta"><span><i class="ti ti-users" aria-hidden="true"></i> 24 joined</span><span><i class="ti ti-clock" aria-hidden="true"></i> Started 14 min ago</span></div>
+              <div class="sess-footer"><button class="btn btn-sm bsm-red" aria-label="Join live Python office hours">Join Session</button><button class="btn btn-sm bsm-outline" aria-label="View chat">💬 Chat</button></div>
+            </article>
+            <article class="sess-card" aria-label="Upcoming session: Databases Deep Dive, Saturday 10 AM">
+              <div class="sess-hdr"><div><div class="sess-title">Databases Deep Dive</div><div class="sess-info">Fatima Ouedraogo • Advanced SQL &amp; NoSQL</div></div><span class="sess-status ss-soon">Tomorrow</span></div>
+              <div class="sess-meta"><span><i class="ti ti-calendar" aria-hidden="true"></i> Sat, May 9</span><span><i class="ti ti-clock" aria-hidden="true"></i> 10:00 AM EAT</span><span><i class="ti ti-users" aria-hidden="true"></i> 31 registered</span></div>
+              <div class="sess-footer"><button class="btn btn-sm" style="background:var(--primary);color:white" aria-label="Register for Databases Deep Dive session">Register</button><button class="btn btn-sm bsm-outline" aria-label="Add to calendar">📅 Add to Calendar</button></div>
+            </article>
+            <article class="sess-card" aria-label="Upcoming session: Web Dev Workshop, May 14">
+              <div class="sess-hdr"><div><div class="sess-title">Web Dev Workshop: React Intro</div><div class="sess-info">Kofi Mensah • Building your first React app</div></div><span class="sess-status ss-upcoming">May 14</span></div>
+              <div class="sess-meta"><span><i class="ti ti-calendar" aria-hidden="true"></i> May 14, 2026</span><span><i class="ti ti-clock" aria-hidden="true"></i> 2:00 PM EAT</span><span><i class="ti ti-users" aria-hidden="true"></i> 18 registered</span></div>
+              <div class="sess-footer"><button class="btn btn-sm" style="background:var(--primary);color:white" aria-label="Register for React intro workshop">Register</button><button class="btn btn-sm bsm-outline" aria-label="Add to calendar">📅 Add to Calendar</button></div>
+            </article>
+            <article class="sess-card" aria-label="Upcoming session: AI for Africa webinar, May 22">
+              <div class="sess-hdr"><div><div class="sess-title">AI for Africa Webinar</div><div class="sess-info">Kofi Boateng (Google) • Machine Learning on the continent</div></div><span class="sess-status ss-upcoming">May 22</span></div>
+              <div class="sess-meta"><span><i class="ti ti-calendar" aria-hidden="true"></i> May 22, 2026</span><span><i class="ti ti-clock" aria-hidden="true"></i> 4:00 PM EAT</span><span><i class="ti ti-users" aria-hidden="true"></i> 87 registered</span></div>
+              <div class="sess-footer"><button class="btn btn-sm" style="background:var(--primary);color:white" aria-label="Register for AI for Africa webinar">Register</button><button class="btn btn-sm bsm-outline" aria-label="Add to calendar">📅 Add to Calendar</button></div>
+            </article>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>📼 Recordings</h3><button class="link-btn">View all →</button></div>
+            <div class="card-body" style="padding:0">
+              <div class="ev-item"><div class="ev-dot" style="background:var(--primary)"></div><div class="ev-info"><h5>Introduction to Git &amp; GitHub</h5><p>Dr. Kwame Osei · 58 min · May 2, 2026</p></div><button class="btn btn-ghost btn-sm" style="margin-left:auto;flex-shrink:0" aria-label="Watch Git and GitHub recording">▶ Watch</button></div>
+              <div class="ev-item"><div class="ev-dot" style="background:var(--accent)"></div><div class="ev-info"><h5>SQL Joins Explained</h5><p>Fatima Ouedraogo · 44 min · Apr 26, 2026</p></div><button class="btn btn-ghost btn-sm" style="margin-left:auto;flex-shrink:0" aria-label="Watch SQL joins recording">▶ Watch</button></div>
+              <div class="ev-item" style="border:none"><div class="ev-dot" style="background:var(--gold)"></div><div class="ev-info"><h5>Career in Tech: From Africa to the World</h5><p>Panel discussion · 1h 12min · Apr 18, 2026</p></div><button class="btn btn-ghost btn-sm" style="margin-left:auto;flex-shrink:0" aria-label="Watch career panel recording">▶ Watch</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             FORUM VIEW
+             ============================================================ -->
+        <section class="view" id="view-forum" aria-label="Discussion Forum">
+          <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div><h2>Discussion Forum</h2><p>Ask questions, share knowledge, grow together</p></div>
+            <button class="btn btn-accent btn-sm" id="new-thread-btn" aria-label="Create new discussion thread"><i class="ti ti-plus" aria-hidden="true"></i> New Thread</button>
+          </div>
+          <div class="forum-cats" role="list" aria-label="Forum categories">
+            <div class="forum-cat" role="listitem" tabindex="0" aria-label="Python category, 142 threads"><div class="fc-icon">🐍</div><div class="fc-name">Python</div><div class="fc-count">142 threads</div></div>
+            <div class="forum-cat" role="listitem" tabindex="0" aria-label="Web Development category, 89 threads"><div class="fc-icon">🌐</div><div class="fc-name">Web Dev</div><div class="fc-count">89 threads</div></div>
+            <div class="forum-cat" role="listitem" tabindex="0" aria-label="Data Science category, 67 threads"><div class="fc-icon">📊</div><div class="fc-name">Data Science</div><div class="fc-count">67 threads</div></div>
+            <div class="forum-cat" role="listitem" tabindex="0" aria-label="Career and Jobs category, 54 threads"><div class="fc-icon">🚀</div><div class="fc-name">Career &amp; Jobs</div><div class="fc-count">54 threads</div></div>
+          </div>
+          <div class="forum-compose">
+            <input class="form-input" type="text" id="thread-title-input" placeholder="Start a discussion or ask a question…" aria-label="New thread title" maxlength="120">
+          </div>
+          <div class="thread-list" role="list" aria-label="Discussion threads">
+            <div class="thread-item" role="listitem" tabindex="0">
+              <div class="thread-av" style="background:var(--accent)" aria-hidden="true">KA</div>
+              <div class="thread-main">
+                <div class="thread-title">Understanding closures vs scope in Python <span class="new-pill" aria-label="New replies">New</span></div>
+                <div class="thread-preview">I'm confused about how nested functions can access variables from the outer function…</div>
+                <div class="thread-tags"><span class="ttag">Python</span><span class="ttag">Functions</span><span class="ttag">Scope</span></div>
+              </div>
+              <div class="thread-stats"><span><i class="ti ti-message-2" aria-hidden="true"></i> 8 replies</span><span><i class="ti ti-eye" aria-hidden="true"></i> 142 views</span><span>2h ago</span></div>
+            </div>
+            <div class="thread-item" role="listitem" tabindex="0">
+              <div class="thread-av" style="background:var(--primary)" aria-hidden="true">ZN</div>
+              <div class="thread-main">
+                <div class="thread-title">Best resources for learning React as an African developer</div>
+                <div class="thread-preview">I've been building with vanilla JS and want to level up to React. What free resources worked best for you?</div>
+                <div class="thread-tags"><span class="ttag">Web Dev</span><span class="ttag">React</span><span class="ttag">Resources</span></div>
+              </div>
+              <div class="thread-stats"><span><i class="ti ti-message-2" aria-hidden="true"></i> 23 replies</span><span><i class="ti ti-eye" aria-hidden="true"></i> 390 views</span><span>Yesterday</span></div>
+            </div>
+            <div class="thread-item" role="listitem" tabindex="0">
+              <div class="thread-av" style="background:#0F766E" aria-hidden="true">IO</div>
+              <div class="thread-main">
+                <div class="thread-title">How do I get my first tech internship in Nigeria?</div>
+                <div class="thread-preview">I'm finishing my Web Development track and looking for internships. What's the best strategy in Lagos?</div>
+                <div class="thread-tags"><span class="ttag">Career</span><span class="ttag">Nigeria</span><span class="ttag">Internships</span></div>
+              </div>
+              <div class="thread-stats"><span><i class="ti ti-message-2" aria-hidden="true"></i> 31 replies</span><span><i class="ti ti-eye" aria-hidden="true"></i> 521 views</span><span>3 days ago</span></div>
+            </div>
+            <div class="thread-item" role="listitem" tabindex="0">
+              <div class="thread-av" style="background:var(--gold);color:white" aria-hidden="true">FO</div>
+              <div class="thread-main">
+                <div class="thread-title">SQL vs NoSQL — when to use which?</div>
+                <div class="thread-preview">I'm starting the Databases module and I'm not clear on when to pick a NoSQL database vs relational…</div>
+                <div class="thread-tags"><span class="ttag">Databases</span><span class="ttag">SQL</span><span class="ttag">NoSQL</span></div>
+              </div>
+              <div class="thread-stats"><span><i class="ti ti-message-2" aria-hidden="true"></i> 17 replies</span><span><i class="ti ti-eye" aria-hidden="true"></i> 274 views</span><span>4 days ago</span></div>
+            </div>
+            <div class="thread-item" role="listitem" tabindex="0">
+              <div class="thread-av" style="background:#B45309" aria-hidden="true">MS</div>
+              <div class="thread-main">
+                <div class="thread-title">African Women in Tech: share your story 🌍</div>
+                <div class="thread-preview">A thread to celebrate and support women in our cohort. Share your journey, challenges, and wins!</div>
+                <div class="thread-tags"><span class="ttag">Community</span><span class="ttag">Women in Tech</span></div>
+              </div>
+              <div class="thread-stats"><span><i class="ti ti-message-2" aria-hidden="true"></i> 44 replies</span><span><i class="ti ti-eye" aria-hidden="true"></i> 712 views</span><span>1 week ago</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SETTINGS VIEW
+             ============================================================ -->
+        <section class="view" id="view-settings" aria-label="Settings">
+          <div class="page-header"><h2>Settings</h2><p>Manage your account preferences and notifications</p></div>
+          <div class="settings-layout">
+            <nav class="settings-nav" aria-label="Settings categories">
+              <button class="snav-item active" data-stab="account"><i class="ti ti-user" aria-hidden="true"></i> Account</button>
+              <button class="snav-item" data-stab="notifications"><i class="ti ti-bell" aria-hidden="true"></i> Notifications</button>
+              <button class="snav-item" data-stab="privacy"><i class="ti ti-shield" aria-hidden="true"></i> Privacy</button>
+              <button class="snav-item" data-stab="appearance"><i class="ti ti-palette" aria-hidden="true"></i> Appearance</button>
+              <button class="snav-item" data-stab="security"><i class="ti ti-lock" aria-hidden="true"></i> Security</button>
+            </nav>
+            <div class="settings-body" id="settings-body">
+              <!-- Account tab (default) -->
+              <div id="stab-account">
+                <div class="settings-section">
+                  <h3>Profile Information</h3>
+                  <p class="ss-desc">Update your public profile details visible to instructors and peers.</p>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" id="set-fname" value="Amara" aria-label="First name"></div>
+                    <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" id="set-lname" value="Diallo" aria-label="Last name"></div>
+                  </div>
+                  <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" id="set-email" value="amara.diallo@student.ubuntu.ac" aria-label="Email address"></div>
+                  <div class="form-group"><label class="form-label">Country</label><select class="form-select" id="set-country" aria-label="Country">
+                    <option>🇸🇳 Senegal</option><option>🇳🇬 Nigeria</option><option>🇰🇪 Kenya</option><option>🇬🇭 Ghana</option><option>🇿🇦 South Africa</option><option>🇪🇹 Ethiopia</option><option>🇪🇬 Egypt</option><option>🇺🇬 Uganda</option><option>🇹🇿 Tanzania</option><option>🇷🇼 Rwanda</option>
+                  </select></div>
+                  <div class="form-group"><label class="form-label">Bio</label><textarea class="form-input" id="set-bio" rows="3" aria-label="Bio" maxlength="300">Passionate about using technology to solve real problems across Africa. Software engineering student at Ubuntu Academy.</textarea></div>
+                  <button class="btn btn-primary" id="save-profile-btn" style="width:auto" aria-label="Save profile changes"><span class="btn-text">Save Changes</span><span class="btn-spinner"></span></button>
+                </div>
+                <div class="settings-section">
+                  <h3>Language &amp; Region</h3>
+                  <p class="ss-desc">Set your language and timezone preferences.</p>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div class="form-group"><label class="form-label">Language</label><select class="form-select" aria-label="Language"><option>English</option><option>Français</option><option>Swahili</option><option>Arabic</option><option>Hausa</option></select></div>
+                    <div class="form-group"><label class="form-label">Timezone</label><select class="form-select" aria-label="Timezone"><option>EAT (UTC+3)</option><option>WAT (UTC+1)</option><option>CAT (UTC+2)</option><option>GMT (UTC+0)</option></select></div>
+                  </div>
+                </div>
+              </div>
+              <div id="stab-notifications" style="display:none">
+                <div class="settings-section">
+                  <h3>Notification Preferences</h3>
+                  <p class="ss-desc">Choose how and when you receive notifications.</p>
+                  <div class="setting-row"><div class="sr-info"><h5>Assignment Reminders</h5><p>Get notified 24h before assignment deadlines</p></div><button class="toggle" role="switch" aria-checked="true" aria-label="Toggle assignment reminders"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Live Session Alerts</h5><p>Receive alerts 30 min before live sessions</p></div><button class="toggle" role="switch" aria-checked="true" aria-label="Toggle live session alerts"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>New Announcements</h5><p>Email when instructors post announcements</p></div><button class="toggle" role="switch" aria-checked="true" aria-label="Toggle announcement notifications"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Forum Replies</h5><p>Notify when someone replies to your threads</p></div><button class="toggle" role="switch" aria-checked="false" aria-label="Toggle forum reply notifications"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Leaderboard Changes</h5><p>Alert when your ranking changes significantly</p></div><button class="toggle" role="switch" aria-checked="false" aria-label="Toggle leaderboard notifications"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Weekly Progress Report</h5><p>Summary email every Monday morning</p></div><button class="toggle" role="switch" aria-checked="true" aria-label="Toggle weekly progress report"></button></div>
+                </div>
+              </div>
+              <div id="stab-privacy" style="display:none">
+                <div class="settings-section">
+                  <h3>Privacy Controls</h3>
+                  <p class="ss-desc">Manage who can see your profile and activity.</p>
+                  <div class="setting-row"><div class="sr-info"><h5>Public Profile</h5><p>Allow other learners to view your profile</p></div><button class="toggle" role="switch" aria-checked="true" aria-label="Toggle public profile"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Show on Leaderboard</h5><p>Appear in cohort rankings</p></div><button class="toggle" role="switch" aria-checked="true" aria-label="Toggle leaderboard visibility"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Activity Status</h5><p>Show when you're online to classmates</p></div><button class="toggle" role="switch" aria-checked="false" aria-label="Toggle activity status"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Share Progress with Employer</h5><p>Allow verified employers to view your certificates</p></div><button class="toggle" role="switch" aria-checked="false" aria-label="Toggle employer progress sharing"></button></div>
+                </div>
+              </div>
+              <div id="stab-appearance" style="display:none">
+                <div class="settings-section">
+                  <h3>Appearance</h3>
+                  <p class="ss-desc">Customize how Ubuntu Academy looks for you.</p>
+                  <div class="setting-row"><div class="sr-info"><h5>Compact Sidebar</h5><p>Collapse sidebar to icons only</p></div><button class="toggle" role="switch" aria-checked="false" aria-label="Toggle compact sidebar"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Reduced Motion</h5><p>Disable animations for better accessibility</p></div><button class="toggle" role="switch" aria-checked="false" id="reduce-motion-toggle" aria-label="Toggle reduced motion"></button></div>
+                  <div class="setting-row"><div class="sr-info"><h5>Large Text</h5><p>Increase base font size for readability</p></div><button class="toggle" role="switch" aria-checked="false" id="large-text-toggle" aria-label="Toggle large text"></button></div>
+                </div>
+              </div>
+              <div id="stab-security" style="display:none">
+                <div class="settings-section">
+                  <h3>Change Password</h3>
+                  <p class="ss-desc">Use a strong password to protect your account.</p>
+                  <div class="form-group"><label class="form-label">Current Password</label><input class="form-input" type="password" placeholder="Enter current password" aria-label="Current password"></div>
+                  <div class="form-group"><label class="form-label">New Password</label><input class="form-input" type="password" id="new-pw" placeholder="Min. 8 characters" aria-label="New password" minlength="8"></div>
+                  <div class="form-group"><label class="form-label">Confirm New Password</label><input class="form-input" type="password" id="confirm-pw" placeholder="Repeat new password" aria-label="Confirm new password"></div>
+                  <button class="btn btn-primary" style="width:auto" id="change-pw-btn" aria-label="Update password"><span class="btn-text">Update Password</span><span class="btn-spinner"></span></button>
+                </div>
+                <div class="settings-section">
+                  <h3>Danger Zone</h3>
+                  <p class="ss-desc">Irreversible actions — please proceed carefully.</p>
+                  <div class="setting-row"><div class="sr-info"><h5>Delete Account</h5><p>Permanently remove your account and all data</p></div><button class="btn btn-danger btn-sm" id="delete-account-btn" aria-label="Delete account permanently">Delete Account</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             ADMIN / INSTRUCTOR PANEL VIEW
+             ============================================================ -->
+        <section class="view" id="view-admin" aria-label="Admin Panel">
+          <div class="page-header"><h2 id="admin-title">Admin Panel</h2><p id="admin-sub">Manage learners, cohorts and content</p></div>
+          <div class="role-banner">
+            <div class="role-icon" style="background:var(--gold-light)" aria-hidden="true">⚙️</div>
+            <div><div style="font-size:14px;font-weight:600;color:var(--text)" id="admin-role-label">Program Manager</div><p id="admin-role-desc" style="font-size:12px;color:var(--text-muted)">You have full access to manage cohorts, learners, and course content</p></div>
+            <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" aria-label="Add new learner"><i class="ti ti-user-plus" aria-hidden="true"></i> Add Learner</button>
+              <button class="btn btn-ghost btn-sm" aria-label="Export cohort report"><i class="ti ti-download" aria-hidden="true"></i> Export</button>
+            </div>
+          </div>
+          <div class="admin-grid">
+            <div class="admin-stat"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:9px">Total Learners</div><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text)">1,284</div><div style="font-size:11px;color:var(--primary);font-weight:600;margin-top:3px">↑ +48 this month</div></div>
+            <div class="admin-stat"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:9px">Active Cohorts</div><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text)">8</div><div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:3px">Cohort 9 starts Jun 1</div></div>
+            <div class="admin-stat"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:9px">Completion Rate</div><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text)">94%</div><div style="font-size:11px;color:var(--primary);font-weight:600;margin-top:3px">↑ +2% vs last cohort</div></div>
+            <div class="admin-stat"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:9px">At-Risk Learners</div><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--danger)">7</div><div style="font-size:11px;color:var(--danger);font-weight:600;margin-top:3px">Need intervention</div></div>
+          </div>
+          <div class="cohort-tbl-wrap">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+              <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600">Cohort 8 — Learner Overview</div>
+              <input class="form-input" type="search" placeholder="Search learners…" style="width:200px;padding:7px 12px" aria-label="Search learners in cohort">
+            </div>
+            <table class="cohort-tbl" aria-label="Cohort 8 learners">
+              <thead><tr><th scope="col">Learner</th><th scope="col">Country</th><th scope="col">Progress</th><th scope="col">XP</th><th scope="col">Streak</th><th scope="col">Risk</th><th scope="col">Action</th></tr></thead>
+              <tbody>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white" aria-hidden="true">ZN</div><div><div style="font-weight:600;font-size:13px">Zainab Nkosi</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇿🇦 SA</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-track" style="width:60px"><div class="progress-fill pf-green" style="width:100%"></div></div><span style="font-size:11px;font-weight:600">100%</span></div></td><td>6,840</td><td>14 🔥</td><td><span class="risk-badge rb-low">Low</span></td><td><button class="btn btn-ghost btn-sm" aria-label="View Zainab Nkosi profile">View</button></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white" aria-hidden="true">AD</div><div><div style="font-weight:600;font-size:13px">Amara Diallo</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇸🇳 SN</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-track" style="width:60px"><div class="progress-fill pf-orange" style="width:47%"></div></div><span style="font-size:11px;font-weight:600">47%</span></div></td><td>4,820</td><td>7 🔥</td><td><span class="risk-badge rb-low">Low</span></td><td><button class="btn btn-ghost btn-sm" aria-label="View Amara Diallo profile">View</button></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:#7C3AED;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white" aria-hidden="true">CM</div><div><div style="font-weight:600;font-size:13px">Chiamaka Mbeki</div><div style="font-size:11px;color:var(--text-muted)">Data Science</div></div></div></td><td>🇳🇬 NG</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-track" style="width:60px"><div class="progress-fill pf-green" style="width:62%"></div></div><span style="font-size:11px;font-weight:600">62%</span></div></td><td>5,480</td><td>8 🔥</td><td><span class="risk-badge rb-low">Low</span></td><td><button class="btn btn-ghost btn-sm" aria-label="View Chiamaka Mbeki profile">View</button></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white" aria-hidden="true">EB</div><div><div style="font-weight:600;font-size:13px">Emeka Balogun</div><div style="font-size:11px;color:var(--text-muted)">Software Eng</div></div></div></td><td>🇳🇬 NG</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-track" style="width:60px"><div class="progress-fill" style="width:12%;background:var(--danger)"></div></div><span style="font-size:11px;font-weight:600;color:var(--danger)">12%</span></div></td><td>420</td><td>0 ❌</td><td><span class="risk-badge rb-high">High</span></td><td><button class="btn btn-danger btn-sm" aria-label="Intervene for Emeka Balogun">Intervene</button></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:#D97706;display:flex;align-items:center;justify-content:circle;font-size:10px;font-weight:700;color:white" aria-hidden="true">AW</div><div><div style="font-weight:600;font-size:13px">Amina Waweru</div><div style="font-size:11px;color:var(--text-muted)">Data Science</div></div></div></td><td>🇰🇪 KE</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-track" style="width:60px"><div class="progress-fill pf-gold" style="width:28%"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">28%</span></div></td><td>1,240</td><td>2 ⚠️</td><td><span class="risk-badge rb-med">Medium</span></td><td><button class="btn btn-ghost btn-sm" aria-label="View Amina Waweru profile">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div><!-- /page-content -->
+    </div><!-- /main-content -->
+  </div><!-- /app-layout -->
+</div><!-- /app -->
+
+<!-- ============================================================
+     NOTIFICATIONS PANEL
+     ============================================================ -->
+<div class="notif-overlay" id="notif-overlay" role="dialog" aria-modal="true" aria-label="Notifications">
+  <div class="notif-backdrop" id="notif-backdrop"></div>
+  <div class="notif-panel">
+    <div class="np-header">
+      <h3>Notifications</h3>
+      <div class="np-actions">
+        <button class="np-mark-all" id="mark-all-read" aria-label="Mark all notifications as read">Mark all read</button>
+        <button class="np-close" id="close-notifs" aria-label="Close notifications"><i class="ti ti-x" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="notif-list" id="notif-list" role="list" aria-live="polite"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SEARCH OVERLAY
+     ============================================================ -->
+<div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="search-box" role="search">
+    <div class="search-input-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="search" id="search-input" placeholder="Search courses, lessons, assignments…" aria-label="Search" autocomplete="off">
+      <button class="search-clear" id="search-close" aria-label="Close search"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div>
+    <div class="search-close-hint">Press <kbd>Esc</kbd> to close</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CONFIRM MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Confirm Action</h3>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close dialog"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div class="modal-body"><p id="modal-body-text">Are you sure you want to do this?</p></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" id="modal-cancel-btn">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="modal-confirm-btn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container" role="region" aria-live="polite" aria-label="Notifications"></div>
+
+<!-- ============================================================
+     JAVASCRIPT — PRODUCTION-GRADE ARCHITECTURE
+     ============================================================ -->
+<script>
+'use strict';
+
+/* ============================================================
+   1. CENTRALIZED APP STATE (single source of truth)
+   ============================================================ */
+const AppState = {
+  currentView: 'dashboard',
+  user: null,
+  notifications: [],
+  settings: { animations: true, largeText: false },
+  quiz: { currentQ: 0, score: 0, answered: false },
+  cal: { year: 2026, month: 4 }, // 0-indexed, 4 = May
+  _listeners: {},
+
+  on(event, fn) {
+    if (!this._listeners[event]) this._listeners[event] = [];
+    this._listeners[event].push(fn);
+  },
+  emit(event, data) {
+    (this._listeners[event] || []).forEach(fn => fn(data));
+  },
+  set(key, value) {
+    this[key] = value;
+    this.emit('change', { key, value });
+    if (key === 'user') Auth.saveSession(value);
+  }
+};
+
+/* ============================================================
+   2. AUTH MODULE
+   ============================================================ */
+const Auth = {
+  STORAGE_KEY: 'ua_session_v2',
+
+  USERS: {
+    student:  { id:'u1', name:'Amara Diallo',    initials:'AD', track:'Software Engineering', role:'student',    country:'🇸🇳 Senegal',      email:'amara.diallo@student.ubuntu.ac',    password:'demo123' },
+    student2: { id:'u2', name:'Aisha Kamara',    initials:'AK', track:'Data Science',          role:'student',    country:'🇸🇱 Sierra Leone', email:'aisha.kamara@student.ubuntu.ac',    password:'demo123' },
+    mentor:   { id:'u3', name:'Dr. Kwame Osei', initials:'KO', track:'Course Instructor',     role:'instructor', country:'🇬🇭 Ghana',         email:'kwame.osei@instructor.ubuntu.ac',   password:'demo123' },
+    admin:    { id:'u4', name:'Nkechi Adeyemi', initials:'NA', track:'Program Manager',       role:'admin',      country:'🇳🇬 Nigeria',       email:'nkechi.adeyemi@admin.ubuntu.ac',    password:'demo123' }
+  },
+
+  login(emailOrKey, password) {
+    // Find by demo key or email
+    const user = this.USERS[emailOrKey] || Object.values(this.USERS).find(u => u.email === emailOrKey);
+    if (!user) return { success: false, error: 'No account found with that email address.' };
+    if (password && password !== user.password && password !== 'demo123') return { success: false, error: 'Incorrect password. Try "demo123" for demo accounts.' };
+    return { success: true, user };
+  },
+
+  saveSession(user) {
+    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user)); } catch(e) {}
+  },
+
+  loadSession() {
+    try { return JSON.parse(localStorage.getItem(this.STORAGE_KEY)); } catch(e) { return null; }
+  },
+
+  clearSession() {
+    try { localStorage.removeItem(this.STORAGE_KEY); } catch(e) {}
+  }
+};
+
+/* ============================================================
+   3. MOCK API SERVICE (structured for real backend swap)
+   ============================================================ */
+const API = {
+  _delay: (ms = 600) => new Promise(r => setTimeout(r, ms)),
+
+  async login(email, password) {
+    await this._delay(900);
+    return Auth.login(email, password);
+  },
+
+  async markComplete(moduleId) {
+    await this._delay(700);
+    return { success: true, xpEarned: 120, message: 'Module complete! +120 XP earned 🎉' };
+  },
+
+  async postComment(text) {
+    await this._delay(500);
+    if (!text.trim()) return { success: false, error: 'Comment cannot be empty.' };
+    return { success: true, comment: { author: AppState.user?.name, text, time: 'Just now' } };
+  },
+
+  async submitThread(title) {
+    await this._delay(500);
+    if (!title.trim()) return { success: false, error: 'Please add a title.' };
+    return { success: true, message: 'Thread posted! +5 XP' };
+  },
+
+  async updateProfile(data) {
+    await this._delay(800);
+    return { success: true };
+  },
+
+  async changePassword(curr, next, confirm) {
+    await this._delay(700);
+    if (next.length < 8) return { success: false, error: 'Password must be at least 8 characters.' };
+    if (next !== confirm) return { success: false, error: 'Passwords do not match.' };
+    return { success: true };
+  }
+};
+
+/* ============================================================
+   4. ROUTER (hash-based SPA navigation)
+   ============================================================ */
+const Router = {
+  pageInfo: {
+    dashboard:    ['Dashboard',      'Your learning overview'],
+    courses:      ['My Courses',     'Track your learning journey'],
+    lesson:       ['Functions & Scope', 'Python Fundamentals · Module 4'],
+    assignments:  ['Assignments',    '3 pending · manage your submissions'],
+    leaderboard:  ['Leaderboard',    'See how you rank in your cohort'],
+    profile:      ['My Profile',     'Manage your account and settings'],
+    calendar:     ['Schedule',       'Sessions, deadlines and events'],
+    grades:       ['Grades',         'Your academic performance'],
+    certificates: ['Certificates',   '2 earned · 2 in progress'],
+    live:         ['Live Sessions',  'Join live classes and community events'],
+    forum:        ['Forum',          'Ask questions, share knowledge'],
+    settings:     ['Settings',       'Manage preferences and account'],
+    admin:        ['Admin Panel',    'Manage learners, cohorts and content']
+  },
+
+  navigate(viewId) {
+    if (!document.getElementById('view-' + viewId)) {
+      Toast.show(`View "${viewId}" not found.`, 'error'); return;
+    }
+    // Update views
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const el = document.getElementById('view-' + viewId);
+    el.classList.add('active');
+
+    // Update nav
+    document.querySelectorAll('.nav-item[data-view]').forEach(n => {
+      n.classList.toggle('active', n.dataset.view === viewId);
+      n.setAttribute('aria-current', n.dataset.view === viewId ? 'page' : 'false');
+    });
+
+    // Update topbar
+    const info = this.pageInfo[viewId] || [viewId, ''];
+    document.getElementById('tb-title').textContent = info[0];
+    const sub = info[1].includes('Welcome') ? info[1] : info[1] || `Welcome back, ${AppState.user?.name?.split(' ')[0] || ''}`;
+    document.getElementById('tb-sub').textContent = sub;
+
+    AppState.currentView = viewId;
+    window.location.hash = viewId;
+
+    // Close mobile sidebar
+    UI.closeSidebar();
+
+    // Scroll to top
+    document.getElementById('page-content').scrollTop = 0;
+  }
+};
+
+/* ============================================================
+   5. TOAST SYSTEM
+   ============================================================ */
+const Toast = {
+  show(msg, type = 'success', duration = 3500) {
+    const icons = { success: 'ti-circle-check', error: 'ti-alert-circle', info: 'ti-info-circle', warning: 'ti-alert-triangle' };
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.setAttribute('role', 'status');
+    t.setAttribute('aria-live', 'polite');
+    t.innerHTML = `<i class="ti ${icons[type] || icons.success}" aria-hidden="true"></i><span>${Utils.sanitize(msg)}</span>`;
+    const container = document.getElementById('toast-container');
+    container.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('hiding');
+      setTimeout(() => t.remove(), 350);
+    }, duration);
+    return t;
+  }
+};
+
+/* ============================================================
+   6. MODAL SYSTEM
+   ============================================================ */
+const Modal = {
+  _resolve: null,
+  show(title, body, confirmLabel = 'Confirm', type = 'primary') {
+    return new Promise(resolve => {
+      this._resolve = resolve;
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-body-text').textContent = body;
+      const confirmBtn = document.getElementById('modal-confirm-btn');
+      confirmBtn.textContent = confirmLabel;
+      confirmBtn.className = `btn btn-${type} btn-sm`;
+      document.getElementById('confirm-modal').classList.add('open');
+      confirmBtn.focus();
+    });
+  },
+  close(result) {
+    document.getElementById('confirm-modal').classList.remove('open');
+    if (this._resolve) { this._resolve(result); this._resolve = null; }
+  }
+};
+
+/* ============================================================
+   7. NOTIFICATION SYSTEM
+   ============================================================ */
+const Notifications = {
+  data: [
+    { id:1, title:'Assignment Due Tomorrow!', body:'Python Functions Practice — due in 22 hours. Don\'t forget to submit!', icon:'ti-clipboard-list', iconBg:'var(--primary-pale)', unread:true, time:'Just now' },
+    { id:2, title:'Dr. Kwame posted an announcement', body:'Module 4 assignment updated — review the new submission guidelines.', icon:'ti-megaphone', iconBg:'#FEF0E6', unread:true, time:'2 hours ago' },
+    { id:3, title:'You\'re on a 7-day streak! 🔥', body:'Keep it up — you\'re in the top 15% of your cohort this week.', icon:'ti-flame', iconBg:var('--gold-light'), unread:true, time:'Yesterday' },
+    { id:4, title:'New live session: Databases', body:'Fatima Ouedraogo is hosting "SQL Deep Dive" on Saturday at 10 AM EAT.', icon:'ti-video', iconBg:'var(--primary-pale)', unread:false, time:'2 days ago' },
+    { id:5, title:'Cohort leaderboard updated', body:'Zainab Nkosi has taken the #1 spot. You\'re ranked #12.', icon:'ti-trophy', iconBg:'var(--gold-light)', unread:false, time:'3 days ago' },
+    { id:6, title:'New reply in your forum thread', body:'Fatima replied to "Understanding closures in Python" — check it out!', icon:'ti-message-2', iconBg:'#EDE9FE', unread:false, time:'4 days ago' }
+  ],
+
+  render() {
+    const list = document.getElementById('notif-list');
+    const unread = this.data.filter(n => n.unread);
+    list.innerHTML = this.data.map(n => `
+      <div class="notif-item${n.unread ? ' unread' : ''}" role="listitem" data-nid="${n.id}" tabindex="0">
+        <div class="ni-icon" style="background:${n.iconBg || 'var(--bg)'}">
+          <i class="ti ${n.icon}" aria-hidden="true" style="font-size:15px;color:var(--primary)"></i>
+        </div>
+        <div class="ni-text">
+          <strong>${Utils.sanitize(n.title)}</strong>
+          <p>${Utils.sanitize(n.body)}</p>
+          <time class="ni-time">${n.time}</time>
+        </div>
+      </div>`).join('');
+    // Update dot
+    const dot = document.getElementById('notif-dot');
+    dot.style.display = unread.length > 0 ? 'block' : 'none';
+    // Bind items
+    list.querySelectorAll('.notif-item').forEach(el => {
+      el.addEventListener('click', () => this.markRead(+el.dataset.nid));
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') this.markRead(+el.dataset.nid); });
+    });
+  },
+
+  markRead(id) {
+    const n = this.data.find(x => x.id === id);
+    if (n) { n.unread = false; this.render(); }
+  },
+
+  markAllRead() {
+    this.data.forEach(n => n.unread = false);
+    this.render();
+    Toast.show('All notifications marked as read.', 'info');
+  }
+};
+
+// helper to handle CSS var strings in iconBg
+function var_(v) { return v; }
+
+/* ============================================================
+   8. SEARCH
+   ============================================================ */
+const Search = {
+  index: [
+    { type:'course', label:'Python Programming Fundamentals', sub:'Software Engineering · Module 4/8', icon:'ti-books', view:'lesson' },
+    { type:'course', label:'Web Development Fundamentals', sub:'Software Engineering · Module 6/10', icon:'ti-books', view:'lesson' },
+    { type:'course', label:'Databases & SQL Fundamentals', sub:'Completed · 6/6 modules', icon:'ti-books', view:'courses' },
+    { type:'assignment', label:'Module 4: Python Functions Practice', sub:'Due tomorrow · 100 pts', icon:'ti-clipboard-list', view:'assignments' },
+    { type:'assignment', label:'Build a Responsive Portfolio Page', sub:'Due in 5 days · 150 pts', icon:'ti-clipboard-list', view:'assignments' },
+    { type:'lesson', label:'Functions & Scope in Python', sub:'Python Fundamentals · Module 4', icon:'ti-player-play', view:'lesson' },
+    { type:'lesson', label:'Variables & Data Types', sub:'Python Fundamentals · Module 2', icon:'ti-player-play', view:'lesson' },
+    { type:'page', label:'Leaderboard', sub:'View cohort rankings', icon:'ti-trophy', view:'leaderboard' },
+    { type:'page', label:'Grades', sub:'View your academic performance', icon:'ti-chart-bar', view:'grades' },
+    { type:'page', label:'Certificates', sub:'2 earned certificates', icon:'ti-certificate', view:'certificates' },
+    { type:'page', label:'Live Sessions', sub:'Join live classes', icon:'ti-video', view:'live' },
+    { type:'page', label:'Settings', sub:'Manage your account', icon:'ti-settings', view:'settings' },
+    { type:'forum', label:'Understanding closures vs scope in Python', sub:'Forum · 8 replies', icon:'ti-message-2', view:'forum' },
+    { type:'forum', label:'Best resources for React as an African developer', sub:'Forum · 23 replies', icon:'ti-message-2', view:'forum' }
+  ],
+
+  _debounceTimer: null,
+
+  query(q) {
+    if (!q.trim()) return this.renderDefault();
+    const lower = q.toLowerCase();
+    const results = this.index.filter(item =>
+      item.label.toLowerCase().includes(lower) || item.sub.toLowerCase().includes(lower)
+    );
+    const container = document.getElementById('search-results');
+    if (!results.length) {
+      container.innerHTML = `<div class="search-empty" role="status"><i class="ti ti-search" style="font-size:32px;display:block;margin:0 auto 8px;opacity:.3"></i>No results for "<strong>${Utils.sanitize(q)}</strong>"</div>`;
+      return;
+    }
+    const grouped = {};
+    results.forEach(r => { if (!grouped[r.type]) grouped[r.type] = []; grouped[r.type].push(r); });
+    const labels = { course:'Courses', assignment:'Assignments', lesson:'Lessons', page:'Pages', forum:'Forum' };
+    container.innerHTML = Object.entries(grouped).map(([type, items]) =>
+      `<div class="sr-section-head" role="heading" aria-level="2">${labels[type] || type}</div>` +
+      items.map(item => `<div class="sr-item" role="option" tabindex="0" data-view="${item.view}" aria-label="${item.label}">
+        <i class="ti ${item.icon}" aria-hidden="true"></i>
+        <div><div class="sr-item-title">${Utils.highlightMatch(item.label, q)}</div><div class="sr-item-sub">${Utils.sanitize(item.sub)}</div></div>
+      </div>`).join('')
+    ).join('');
+    container.querySelectorAll('.sr-item').forEach(el => {
+      el.addEventListener('click', () => { this.close(); Router.navigate(el.dataset.view); });
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') { this.close(); Router.navigate(el.dataset.view); } });
+    });
+  },
+
+  renderDefault() {
+    const quick = ['dashboard', 'courses', 'assignments', 'leaderboard'];
+    document.getElementById('search-results').innerHTML =
+      '<div class="sr-section-head" role="heading" aria-level="2">Quick Links</div>' +
+      quick.map(v => {
+        const info = Router.pageInfo[v];
+        return `<div class="sr-item" role="option" tabindex="0" data-view="${v}" aria-label="${info[0]}">
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          <div><div class="sr-item-title">${info[0]}</div><div class="sr-item-sub">${info[1]}</div></div>
+        </div>`;
+      }).join('');
+    document.querySelectorAll('#search-results .sr-item').forEach(el => {
+      el.addEventListener('click', () => { this.close(); Router.navigate(el.dataset.view); });
+    });
+  },
+
+  open() {
+    document.getElementById('search-overlay').classList.add('open');
+    const input = document.getElementById('search-input');
+    input.value = '';
+    this.renderDefault();
+    setTimeout(() => input.focus(), 50);
+  },
+
+  close() {
+    document.getElementById('search-overlay').classList.remove('open');
+    document.getElementById('search-input').value = '';
+  }
+};
+
+/* ============================================================
+   9. CALENDAR
+   ============================================================ */
+const Calendar = {
+  EVENTS: {
+    '2026-5-9':  [{ label:'Assignment Due', cls:'ce-red' }],
+    '2026-5-10': [{ label:'Live: Databases', cls:'ce-orange' }],
+    '2026-5-8':  [{ label:'Lesson: Functions', cls:'ce-green' }, { label:'Office Hours', cls:'ce-orange' }],
+    '2026-5-13': [{ label:'Module 4 Quiz', cls:'ce-green' }],
+    '2026-5-20': [{ label:'Hackathon!', cls:'ce-gold' }],
+    '2026-5-22': [{ label:'AI Webinar', cls:'ce-purple' }],
+    '2026-5-15': [{ label:'Career Workshop', cls:'ce-gold' }]
+  },
+  MONTHS: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+
+  render() {
+    const { year, month } = AppState.cal;
+    document.getElementById('cal-month-label').textContent = `${this.MONTHS[month]} ${year}`;
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrev = new Date(year, month, 0).getDate();
+    const today = new Date();
+    const grid = document.getElementById('cal-days');
+    let html = '';
+    // Prev month padding
+    for (let i = firstDay - 1; i >= 0; i--) {
+      html += `<div class="cal-day other-month"><div class="day-num">${daysInPrev - i}</div></div>`;
+    }
+    // Current month days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+      const key = `${year}-${month + 1}-${d}`;
+      const events = this.EVENTS[key] || [];
+      const evHtml = events.map(e => `<div class="cal-event ${e.cls}">${Utils.sanitize(e.label)}</div>`).join('');
+      html += `<div class="cal-day${isToday ? ' today' : ''}" role="gridcell" aria-label="${this.MONTHS[month]} ${d}, ${year}${isToday ? ', today' : ''}${events.length ? ', ' + events.map(e=>e.label).join(', ') : ''}">
+        <div class="day-num">${d}</div>${evHtml}</div>`;
+    }
+    // Next month padding
+    const total = firstDay + daysInMonth;
+    const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let d = 1; d <= remaining; d++) {
+      html += `<div class="cal-day other-month"><div class="day-num">${d}</div></div>`;
+    }
+    grid.innerHTML = html;
+  },
+
+  prevMonth() {
+    if (AppState.cal.month === 0) { AppState.cal.month = 11; AppState.cal.year--; }
+    else AppState.cal.month--;
+    this.render();
+  },
+
+  nextMonth() {
+    if (AppState.cal.month === 11) { AppState.cal.month = 0; AppState.cal.year++; }
+    else AppState.cal.month++;
+    this.render();
+  }
+};
+
+/* ============================================================
+   10. QUIZ ENGINE
+   ============================================================ */
+const Quiz = {
+  questions: [
+    { q:'What keyword defines a function in Python?', opts:['function','def','define','func'], correct:1 },
+    { q:'What does "DRY" stand for in programming?', opts:["Don't Repeat Yourself",'Design Run Yield','Dynamic Resource Yield','Define Reuse Yourself'], correct:0 },
+    { q:'What is the scope of a variable defined inside a function?', opts:['Global','Local','Universal','Block'], correct:1 },
+    { q:'Which is the correct way to call a function named greet?', opts:['call greet()','function greet()','greet()','run:greet'], correct:2 }
+  ],
+
+  current: 0,
+  score: 0,
+  answered: false,
+
+  render() {
+    const q = this.questions[this.current];
+    document.getElementById('quiz-question').textContent = q.q;
+    document.getElementById('quiz-progress-label').textContent = `Knowledge Check · Question ${this.current + 1} of ${this.questions.length}`;
+    const optsList = document.querySelector('.quiz-opts');
+    const letters = ['A','B','C','D'];
+    optsList.innerHTML = q.opts.map((opt, i) => `
+      <li class="quiz-opt" role="radio" aria-checked="false" tabindex="0" data-idx="${i}" data-correct="${i === q.correct}">
+        <div class="opt-letter" aria-hidden="true">${letters[i]}</div>${Utils.sanitize(opt)}
+      </li>`).join('');
+    document.getElementById('quiz-feedback').style.display = 'none';
+    document.getElementById('next-question-btn').classList.add('hidden');
+    const scoreDisplay = document.getElementById('quiz-score-display');
+    scoreDisplay.textContent = this.current > 0 ? `Score so far: ${this.score}/${this.current}` : '';
+    this.answered = false;
+    // Bind
+    optsList.querySelectorAll('.quiz-opt').forEach(el => {
+      el.addEventListener('click', () => this.selectAnswer(el));
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.selectAnswer(el); } });
+    });
+  },
+
+  selectAnswer(el) {
+    if (this.answered) return;
+    this.answered = true;
+    const isCorrect = el.dataset.correct === 'true';
+    if (isCorrect) this.score++;
+    document.querySelectorAll('.quiz-opt').forEach(o => {
+      o.classList.add('disabled');
+      if (o.dataset.correct === 'true') o.classList.add('correct');
+    });
+    if (!isCorrect) el.classList.add('wrong');
+    el.setAttribute('aria-checked', 'true');
+    const fb = document.getElementById('quiz-feedback');
+    fb.style.display = 'block';
+    if (isCorrect) {
+      fb.style.cssText = 'display:block;background:#DCFCE7;color:#166534;padding:12px;border-radius:8px;font-size:13px';
+      fb.textContent = '✅ Correct! +10 XP earned.';
+      Toast.show('+10 XP earned! Keep going! ⚡', 'success', 2000);
+    } else {
+      fb.style.cssText = 'display:block;background:#FEE2E2;color:#991B1B;padding:12px;border-radius:8px;font-size:13px';
+      fb.textContent = `❌ Not quite. The correct answer is "${this.questions[this.current].opts[this.questions[this.current].correct]}".`;
+    }
+    if (this.current < this.questions.length - 1) {
+      document.getElementById('next-question-btn').classList.remove('hidden');
+    } else {
+      document.getElementById('quiz-score-display').textContent = `🎉 Final Score: ${this.score}/${this.questions.length}`;
+      Toast.show(`Quiz complete! You scored ${this.score}/${this.questions.length} — ${this.score >= 3 ? 'Distinction 🏆' : 'Keep practising 💪'}`, 'info', 5000);
+    }
+  },
+
+  nextQuestion() {
+    this.current++;
+    if (this.current < this.questions.length) this.render();
+  }
+};
+
+/* ============================================================
+   11. UI HELPERS
+   ============================================================ */
+const UI = {
+  openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebar-overlay').classList.add('open');
+    document.getElementById('menu-toggle').setAttribute('aria-expanded', 'true');
+  },
+  closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+    document.getElementById('menu-toggle').setAttribute('aria-expanded', 'false');
+  },
+  toggleSidebar() {
+    if (document.getElementById('sidebar').classList.contains('open')) this.closeSidebar();
+    else this.openSidebar();
+  }
+};
+
+/* ============================================================
+   12. UTILS
+   ============================================================ */
+const Utils = {
+  sanitize(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  },
+  highlightMatch(text, query) {
+    const safe = this.sanitize(text);
+    const safeQ = Utils.sanitize(query);
+    const re = new RegExp(`(${safeQ.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    return safe.replace(re, '<mark style="background:var(--gold-light);border-radius:2px">$1</mark>');
+  },
+  getGreeting() {
+    const h = new Date().getHours();
+    return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  },
+  setButtonLoading(btn, loading) {
+    btn.classList.toggle('loading', loading);
+    btn.disabled = loading;
+  },
+  validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+};
+
+/* ============================================================
+   13. APP BOOTSTRAP
+   ============================================================ */
+const App = {
+  async init() {
+    // Show loading screen
+    document.getElementById('loading-screen').style.display = 'flex';
+    await Utils.sleep?.(800) || new Promise(r => setTimeout(r, 800));
+    document.getElementById('loading-screen').style.display = 'none';
+
+    // Restore session
+    const saved = Auth.loadSession();
+    if (saved) {
+      this.startSession(saved);
+    } else {
+      document.getElementById('login-page').style.display = 'flex';
+    }
+
+    this.bindGlobalEvents();
+  },
+
+  startSession(user) {
+    AppState.set('user', user);
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    this.applyUser(user);
+    Notifications.render();
+    Calendar.render();
+    Quiz.render();
+    // Route to saved hash or dashboard
+    const hash = window.location.hash.replace('#', '');
+    const view = document.getElementById('view-' + hash) ? hash : 'dashboard';
+    Router.navigate(view);
+  },
+
+  applyUser(user) {
+    // Sidebar
+    document.getElementById('sb-avatar').textContent = user.initials;
+    document.getElementById('sb-name').textContent = user.name;
+    document.getElementById('sb-prog').textContent = user.track;
+    // Topbar
+    document.getElementById('tb-avatar').textContent = user.initials;
+    // Welcome
+    document.getElementById('welcome-msg').textContent = `${Utils.getGreeting()}, ${user.name.split(' ')[0]}! 🌅`;
+    // Profile
+    document.getElementById('prof-av').textContent = user.initials;
+    document.getElementById('prof-name').textContent = user.name;
+    document.getElementById('prof-meta').textContent = `${user.track} · Cohort 8 · ${user.country}`;
+    document.getElementById('pf-name').textContent = user.name;
+    document.getElementById('pf-email').textContent = user.email;
+    document.getElementById('pf-country').textContent = user.country;
+    document.getElementById('pf-prog').textContent = user.track;
+    document.getElementById('set-fname').value = user.name.split(' ')[0];
+    document.getElementById('set-lname').value = user.name.split(' ').slice(1).join(' ');
+    document.getElementById('set-email').value = user.email;
+    // Leaderboard "You" row
+    document.getElementById('your-lb-av').textContent = user.initials;
+    document.getElementById('your-lb-name').innerHTML = `${Utils.sanitize(user.name)} <span class="badge badge-gold" style="font-size:9px;margin-left:4px">You</span>`;
+    document.getElementById('your-country').textContent = user.country;
+    // Certs
+    document.querySelectorAll('[id^=cert-name-]').forEach(el => el.textContent = user.name);
+    // Admin / Instructor
