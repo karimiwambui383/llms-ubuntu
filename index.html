@@ -32,6 +32,13 @@ html
   --topbar-h:64px;
   --transition:.18s ease;
 }
+   .loading-overlay {
+  transition: opacity 0.2s ease;
+}
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* ============================================================
    RESET & BASE
@@ -2267,9 +2274,20 @@ const Utils = {
 const App = {
   async init() {
     // Show loading screen
-    document.getElementById('loading-screen').style.display = 'flex';
-    await Utils.sleep?.(800) || new Promise(r => setTimeout(r, 800));
-    document.getElementById('loading-screen').style.display = 'none';
+    const saved = Auth.loadSession();
+const loadingScreen = document.getElementById('loading-screen');
+
+if (saved) {
+  // Returning user: skip loading animation entirely
+  loadingScreen.style.display = 'none';
+} else {
+  // New user: show briefly for brand impression
+  loadingScreen.style.display = 'flex';
+  await new Promise(r => setTimeout(r, 400)); // reduced from 800ms to 400ms
+  loadingScreen.classList.add('fade-out');
+  await new Promise(r => setTimeout(r, 200));
+  loadingScreen.style.display = 'none';
+}
 
     // Restore session
     const saved = Auth.loadSession();
