@@ -2283,7 +2283,7 @@ if (saved) {
 } else {
   // New user: show briefly for brand impression
   loadingScreen.style.display = 'flex';
-  await new Promise(r => setTimeout(r, 400)); // reduced from 800ms to 400ms
+  await new Promise(r => setTimeout(r, 20)); // reduced from 800ms to 400ms
   loadingScreen.classList.add('fade-out');
   await new Promise(r => setTimeout(r, 200));
   loadingScreen.style.display = 'none';
